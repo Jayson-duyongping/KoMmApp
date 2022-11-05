@@ -1,0 +1,9 @@
+plugins {
+    id 'com.android.library'
+}
+apply from: rootProject.file('config.gradle')
+
+dependencies {
+    // library-common
+    implementation project(':library_common')
+}
