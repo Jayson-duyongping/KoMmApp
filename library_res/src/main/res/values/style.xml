@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+    <style name="TabTextActive">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TabTextInactive">
+        <item name="android:textSize">10sp</item>
+    </style>
+</resources>

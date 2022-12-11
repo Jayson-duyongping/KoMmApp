@@ -33,4 +33,11 @@ android {
     kotlinOptions {
         jvmTarget = '11'
     }
+
+    buildFeatures {
+        // 视图绑定会替代 findViewById
+        viewBinding true
+        // 数据绑定dataBinding
+        dataBinding true
+    }
 }
