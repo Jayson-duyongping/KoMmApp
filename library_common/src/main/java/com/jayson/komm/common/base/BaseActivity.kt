@@ -36,7 +36,7 @@ abstract class BaseActivity : AppCompatActivity {
     }
 
     /**
-     * 加载View之后设置
+     * 设置跟布局android:fitsSystemWindows="true"，或加载View之后设置
      */
     protected fun setPaddingStatusBar(view: View) {
         view.setPadding(0, getStatusBarHeight(), 0, 0);

@@ -1,9 +1,8 @@
 package com.jayson.komm
 
 import androidx.fragment.app.Fragment
-import androidx.viewpager2.widget.ViewPager2.*
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.jayson.komm.common.base.BaseActivity
-import com.jayson.komm.common.ext.immediateStatusBar
 import com.jayson.komm.databinding.ActivityMainBinding
 import com.jayson.komm.girls.GirlsFragment
 import com.jayson.komm.home.HomeFragment
@@ -40,14 +39,12 @@ class MainActivity : BaseActivity() {
 
     override fun setContentView() {
         super.setContentView()
-        immediateStatusBar(true)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
     override fun initView() {
         super.initView()
-        setPaddingStatusBar(binding.rootRl)
         // ViewPager2 和 BottomNavigationView联动
         binding.mainVp.adapter = mainVpAdapter
         binding.mainVp.registerOnPageChangeCallback(pagerChangeCallback)
@@ -61,6 +58,11 @@ class MainActivity : BaseActivity() {
             }
             return@setOnItemSelectedListener true
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.mainBottomNav.setBackgroundColor(window.navigationBarColor)
     }
 
     override fun onDestroy() {
