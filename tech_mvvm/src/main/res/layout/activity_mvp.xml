@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/user_name_tv"
+        style="@style/CommonWrapText"
+        android:hint="用户姓名" />
+
+    <TextView
+        android:id="@+id/user_age_tv"
+        style="@style/CommonWrapText"
+        android:hint="用户年龄" />
+
+    <TextView
+        android:id="@+id/user_btn"
+        style="@style/CommonWrapButton"
+        android:text="获取信息" />
+</LinearLayout>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#FFBB86FC</color>
+    <color name="colorPrimaryPress">#FFBB56FF</color>
     <color name="colorPrimaryVariant">#FF6200EE</color>
 
     <color name="black">#FF000000</color>

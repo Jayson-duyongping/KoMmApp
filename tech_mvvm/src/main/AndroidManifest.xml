@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.jayson.komm.mvvm">
+
+    <application>
+        <activity
+            android:name=".MvvmActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.jayson.komm.mvvm.Main" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MvpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".KMActivity"
+            android:exported="false" />
+    </application>
+
+</manifest>

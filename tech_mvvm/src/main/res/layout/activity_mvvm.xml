@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="UseSwitchCompatOrMaterialXml">
+
+    <data class="MvvmBinding">
+
+        <variable
+            name="textStr"
+            type="String" />
+
+        <variable
+            name="onClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="onMvpClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="onKMClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="OnCheckedChangeListener"
+            type="android.widget.CompoundButton.OnCheckedChangeListener" />
+
+        <variable
+            name="onClickUtil"
+            type="com.jayson.komm.mvvm.util.OnClickUtil" />
+
+        <!--数据类-->
+        <variable
+            name="user"
+            type="com.jayson.komm.mvvm.data.User" />
+
+        <!--常用集合-->
+        <import type="android.util.SparseArray" />
+
+        <import type="java.util.Map" />
+
+        <import type="java.util.List" />
+
+        <variable
+            name="list"
+            type="List&lt;String>" />
+
+        <variable
+            name="sparse"
+            type="SparseArray&lt;String>" />
+
+        <variable
+            name="map"
+            type="Map&lt;String, String>" />
+
+        <variable
+            name="index"
+            type="int" />
+
+        <variable
+            name="key"
+            type="String" />
+
+        <!--可观察集合-->
+        <import type="androidx.databinding.ObservableMap" />
+
+        <variable
+            name="userInfoMap"
+            type="ObservableMap&lt;String, Object>" />
+
+        <import type="androidx.databinding.ObservableList" />
+
+        <variable
+            name="userInfoList"
+            type="ObservableList&lt;Object>" />
+
+        <!--可观察对象-->
+        <import type="androidx.databinding.BaseObservable" />
+
+        <variable
+            name="userOne"
+            type="com.jayson.komm.mvvm.data.UserOne" />
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/common_padding">
+
+            <TextView
+                android:id="@+id/mvp_btn"
+                style="@style/CommonWrapButton"
+                android:onClick="@{onMvpClickListener}"
+                android:text="Mvp实践" />
+
+            <TextView
+                android:id="@+id/km_btn"
+                style="@style/CommonWrapButton"
+                android:onClick="@{onKMClickListener}"
+                android:text="Mvvm实践" />
+
+            <TextView
+                android:id="@+id/one_btn"
+                style="@style/CommonWrapButton"
+                android:onClick="@{onClickListener}"
+                android:text="赋值One" />
+
+            <TextView
+                android:id="@+id/one_tv"
+                style="@style/CommonWrapText"
+                android:text="@{textStr}" />
+
+            <TextView
+                android:id="@+id/two_btn"
+                style="@style/CommonWrapButton"
+                android:onClick="@{() -> onClickUtil.onClickWithMe()}"
+                android:text="监听器绑定" />
+
+            <TextView
+                android:id="@+id/user_name_tv"
+                style="@style/CommonWrapText"
+                android:hint="姓名"
+                android:text="@{user.name}" />
+
+            <TextView
+                android:id="@+id/user_age_tv"
+                style="@style/CommonWrapText"
+                android:hint="年龄"
+                android:text="@{String.valueOf(user.age)}" />
+
+            <!--视图引用-->
+            <EditText
+                android:id="@+id/example_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/example_tv"
+                style="@style/CommonWrapText"
+                android:text="@{exampleEt.text}" />
+
+            <!--集合-->
+            <TextView
+                android:id="@+id/list_tv"
+                style="@style/CommonWrapText"
+                android:text="@{list[index]}" />
+
+            <TextView
+                android:id="@+id/map_tv"
+                style="@style/CommonWrapText"
+                android:text="@{map[key]}" />
+
+            <!--可观察集合-->
+            <TextView
+                style="@style/CommonWrapText"
+                android:text="@{userInfoMap.firstName}" />
+
+            <TextView
+                style="@style/CommonWrapText"
+                android:text="@{userInfoList[0]}" />
+
+            <!--可观察对象-->
+            <TextView
+                style="@style/CommonWrapText"
+                android:text="@{userOne.firstName}" />
+
+            <TextView
+                style="@style/CommonWrapText"
+                android:text="@{userOne.lastName}" />
+
+            <!--开关-->
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:onCheckedChanged="@{OnCheckedChangeListener}" />
+        </LinearLayout>
+    </FrameLayout>
+</layout>

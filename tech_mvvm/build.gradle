@@ -1,0 +1,13 @@
+if(isModule.toBoolean()){
+    apply plugin:'com.android.application'
+}else{
+    apply plugin:'com.android.library'
+}
+apply from: rootProject.file('config.gradle')
+
+dependencies {
+    // library_common
+    implementation project(':library_common')
+    // library_res
+    implementation project(':library_res')
+}

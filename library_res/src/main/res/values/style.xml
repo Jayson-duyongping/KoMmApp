@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
+
     <style name="TabTextActive">
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/colorPrimary</item>
@@ -8,5 +9,29 @@
     <style name="TabTextInactive">
         <item name="android:textSize">10sp</item>
         <item name="android:textColor">@color/colorPrimaryVariant</item>
+    </style>
+
+    <style name="CommonButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/common_summary_size</item>
+        <item name="android:background">@drawable/selector_btn</item>
+    </style>
+
+    <style name="CommonWrapButton" parent="CommonButton">
+        <item name="android:clickable">true</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="CommonWrapText">
+        <item name="android:clickable">true</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
     </style>
 </resources>

@@ -8,6 +8,8 @@ dependencies {
     implementation project(':library_common')
     // library_res
     implementation project(':library_res')
+    // tech
+    implementation project(':tech_mvvm')
     // module
     implementation project(':module_home')
     implementation project(':module_girls')
