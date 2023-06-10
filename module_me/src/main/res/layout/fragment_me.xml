@@ -16,6 +16,11 @@
             android:id="@+id/mvvm_btn"
             style="@style/CommonButton"
             android:text="Mvvm框架" />
+        <Button
+            android:id="@+id/api_btn"
+            android:layout_marginTop="20dp"
+            style="@style/CommonButton"
+            android:text="Api数据" />
     </LinearLayout>
 
     <ImageView

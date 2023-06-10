@@ -14,4 +14,5 @@ dependencies {
     implementation project(':module_home')
     implementation project(':module_girls')
     implementation project(':module_me')
+    implementation project(':module_api')
 }

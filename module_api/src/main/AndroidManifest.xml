@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.jayson.komm.api">
+
+    <application android:networkSecurityConfig="@xml/net_config">
+
+        <activity
+            android:name=".ApiActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.jayson.komm.api.Main" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.PagingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.MmActivity"
+            android:exported="false" />
+    </application>
+
+</manifest>

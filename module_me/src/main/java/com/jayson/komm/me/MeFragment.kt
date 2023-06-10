@@ -1,11 +1,16 @@
 package com.jayson.komm.me
 
-import android.content.Intent
 import android.view.View
 import com.jayson.komm.common.base.BaseFragment
+import com.jayson.komm.common.util.JumpUtils.startGoAction
 import com.jayson.komm.me.databinding.FragmentMeBinding
 
 class MeFragment : BaseFragment() {
+
+    companion object {
+        private const val ACTION_MVVM = "com.jayson.komm.mvvm.Main"
+        private const val ACTION_MM = "com.jayson.komm.api.Main"
+    }
 
     private lateinit var binding: FragmentMeBinding
 
@@ -23,10 +28,10 @@ class MeFragment : BaseFragment() {
             }, 500)
         }
         binding.mvvmBtn.setOnClickListener {
-            val className = Class.forName("com.jayson.komm.mvvm.MvvmActivity")
-            //val intent = Intent(activity,className)
-            val intent = Intent("com.jayson.komm.mvvm.Main")
-            activity?.startActivity(intent)
+            startGoAction(context, ACTION_MVVM)
+        }
+        binding.apiBtn.setOnClickListener {
+            startGoAction(context, ACTION_MM)
         }
     }
 }

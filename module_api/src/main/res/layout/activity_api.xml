@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    tools:context=".ApiActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/common_padding"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/water_flow_btn"
+            style="@style/CommonButton"
+            android:text="普通瀑布流" />
+
+        <Button
+            android:id="@+id/paging_btn"
+            style="@style/CommonButton"
+            android:layout_marginTop="20dp"
+            android:text="Paging分页" />
+    </LinearLayout>
+</LinearLayout>

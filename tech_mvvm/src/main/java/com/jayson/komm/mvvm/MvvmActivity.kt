@@ -15,7 +15,6 @@ import com.jayson.komm.mvvm.databinding.MvvmBinding
 import com.jayson.komm.mvvm.listener.MyLocationObserver
 import com.jayson.komm.mvvm.listener.MyLocationOwner
 import com.jayson.komm.mvvm.model.DiceRollViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
@@ -104,7 +103,7 @@ class MvvmActivity : BaseActivity() {
     }
 
     private fun lifeCycleDemo() {
-        myLocationOwner = MyLocationOwner()
+        myLocationOwner = MyLocationOwner(lifecycle)
         myLocationObserver = MyLocationObserver(this, lifecycle) {
             LogUtils.d(TAG, "lifeCycleDemo, MyLocationObserver update UI")
         }.apply {
