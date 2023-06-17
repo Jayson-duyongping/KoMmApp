@@ -28,10 +28,10 @@ class MeFragment : BaseFragment() {
             }, 500)
         }
         binding.mvvmBtn.setOnClickListener {
-            startGoAction(context, ACTION_MVVM)
+            startGoAction(activity, ACTION_MVVM)
         }
         binding.apiBtn.setOnClickListener {
-            startGoAction(context, ACTION_MM)
+            startGoAction(activity, ACTION_MM)
         }
     }
 }

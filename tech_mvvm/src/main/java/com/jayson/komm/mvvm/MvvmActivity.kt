@@ -1,6 +1,5 @@
 package com.jayson.komm.mvvm
 
-import android.content.Intent
 import android.view.View
 import android.widget.CompoundButton
 import androidx.databinding.DataBindingUtil
@@ -8,6 +7,7 @@ import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableArrayMap
 import androidx.lifecycle.lifecycleScope
 import com.jayson.komm.common.base.BaseActivity
+import com.jayson.komm.common.util.JumpUtils
 import com.jayson.komm.common.util.LogUtils
 import com.jayson.komm.mvvm.data.User
 import com.jayson.komm.mvvm.data.UserOne
@@ -58,14 +58,10 @@ class MvvmActivity : BaseActivity() {
                 userOne?.lastName = "先生"
             }
             onMvpClickListener = View.OnClickListener {
-                Intent(this@MvvmActivity, MvpActivity::class.java).apply {
-                    startActivity(this)
-                }
+                JumpUtils.startGoActivity(this@MvvmActivity, MvpActivity::class.java)
             }
             onKMClickListener = View.OnClickListener {
-                Intent(this@MvvmActivity, KMActivity::class.java).apply {
-                    startActivity(this)
-                }
+                JumpUtils.startGoActivity(this@MvvmActivity, KMActivity::class.java)
             }
             onCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
                 LogUtils.d(TAG, "initView, OnCheckedChangeListener $isChecked")

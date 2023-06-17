@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.jayson.komm.api">
 
-    <application android:networkSecurityConfig="@xml/net_config">
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
 
+    <application android:networkSecurityConfig="@xml/net_config">
         <activity
             android:name=".ApiActivity"
             android:exported="false">
@@ -12,6 +15,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.WebActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.PagingActivity"
             android:exported="false" />

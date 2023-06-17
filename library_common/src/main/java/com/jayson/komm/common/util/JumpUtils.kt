@@ -1,7 +1,8 @@
 package com.jayson.komm.common.util
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
+import com.jayson.komm.common.R
 
 /**
  * @Author: Jayson
@@ -13,19 +14,23 @@ object JumpUtils {
 
     private const val TAG = "JumpUtils"
 
-    fun startGoAction(context: Context?, action: String) {
+    fun startGoAction(activity: Activity?, action: String) {
         kotlin.runCatching {
-            val intent = Intent(action)
-            context?.startActivity(intent)
+            activity?.apply {
+                startActivity(Intent(action))
+                overridePendingTransition(R.anim.slide_enter_in_right, R.anim.slide_enter_out_left)
+            }
         }.onFailure {
             LogUtils.d(TAG, "startGoAction, e:${it.message}")
         }
     }
 
-    fun startGoActivity(context: Context?, cls: Class<*>) {
+    fun startGoActivity(activity: Activity?, cls: Class<*>) {
         kotlin.runCatching {
-            val intent = Intent(context, cls)
-            context?.startActivity(intent)
+            activity?.apply {
+                startActivity(Intent(activity, cls))
+                overridePendingTransition(R.anim.slide_enter_in_right, R.anim.slide_enter_out_left)
+            }
         }.onFailure {
             LogUtils.d(TAG, "startGoActivity, e:${it.message}")
         }
