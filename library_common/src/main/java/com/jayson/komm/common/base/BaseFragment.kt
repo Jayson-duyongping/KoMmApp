@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
-import com.jayson.komm.common.util.LogUtils
 
 /**
  * @Author: Jayson
@@ -49,20 +48,17 @@ abstract class BaseFragment : Fragment {
      * view初始化后的必要配置
      */
     open fun initView(view: View) {
-        LogUtils.d(this.javaClass.simpleName, "初始化 initView")
     }
 
     /**
      * view初始化后的必要配置
      */
     open fun initConfig() {
-        LogUtils.d(this.javaClass.simpleName, "初始化 initConfig")
     }
 
     /**
      * view初始化后的必要数据
      */
     open fun initData() {
-        LogUtils.d(this.javaClass.simpleName, "初始化 initData")
     }
 }

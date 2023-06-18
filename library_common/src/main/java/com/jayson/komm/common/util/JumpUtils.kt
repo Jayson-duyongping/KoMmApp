@@ -21,7 +21,7 @@ object JumpUtils {
                 overridePendingTransition(R.anim.slide_enter_in_right, R.anim.slide_enter_out_left)
             }
         }.onFailure {
-            LogUtils.d(TAG, "startGoAction, e:${it.message}")
+            LogUtils.e(TAG, "startGoAction, e:${it.message}")
         }
     }
 
@@ -32,7 +32,7 @@ object JumpUtils {
                 overridePendingTransition(R.anim.slide_enter_in_right, R.anim.slide_enter_out_left)
             }
         }.onFailure {
-            LogUtils.d(TAG, "startGoActivity, e:${it.message}")
+            LogUtils.e(TAG, "startGoActivity, e:${it.message}")
         }
     }
 }

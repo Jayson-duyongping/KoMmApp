@@ -16,6 +16,10 @@ dependencies {
     // 否则viewModels()找不到
     api 'androidx.activity:activity-ktx:1.7.0'
     api 'androidx.fragment:fragment-ktx:1.5.6'
+    // ui
+    api 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    // paging
+    api "androidx.paging:paging-runtime:$paging_version"
     // retrofit
     api 'com.squareup.retrofit2:retrofit:2.9.0'
     api 'com.squareup.retrofit2:converter-gson:2.9.0'
@@ -25,8 +29,4 @@ dependencies {
     // glide支持下载，PhotoView支持图片放大缩小
     api 'com.github.bumptech.glide:glide:4.15.1'
     api 'com.github.chrisbanes:PhotoView:2.3.0'
-    // ui
-    api 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    // paging
-    api "androidx.paging:paging-runtime:$paging_version"
 }

@@ -29,5 +29,11 @@
             style="@style/CommonButton"
             android:layout_marginTop="20dp"
             android:text="Paging分页" />
+
+        <Button
+            android:id="@+id/news_btn"
+            style="@style/CommonButton"
+            android:layout_marginTop="20dp"
+            android:text="列表页面" />
     </LinearLayout>
 </LinearLayout>

@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.jayson.komm.api">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
 
     <application android:networkSecurityConfig="@xml/net_config">
@@ -23,6 +24,9 @@
             android:exported="false" />
         <activity
             android:name=".ui.MmActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ListActivity"
             android:exported="false" />
     </application>
 
