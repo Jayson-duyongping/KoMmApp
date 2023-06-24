@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.util.AttributeSet
+import android.view.View
 import android.webkit.*
 
 /**
@@ -26,6 +27,8 @@ class CustomWebView @JvmOverloads constructor(
         setBackgroundColor(Color.WHITE)
         // 开启 WebView 调试模式
         setWebContentsDebuggingEnabled(false)
+        // 硬件加速
+        setLayerType(View.LAYER_TYPE_HARDWARE, null);
         settings.apply {
             // 启用JavaScript
             javaScriptEnabled = true
@@ -39,6 +42,10 @@ class CustomWebView @JvmOverloads constructor(
             displayZoomControls = false
             // 缓存模式
             cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
+            // 视频相关
+            allowFileAccess = true
+            allowContentAccess = true
+            mediaPlaybackRequiresUserGesture = false
         }
         // 通过设置WebViewClient来控制WebView的行为
         webViewClient = CustomWebViewClient()

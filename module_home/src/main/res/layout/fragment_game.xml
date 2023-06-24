@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/game_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/common_padding">
+
+    <com.jayson.komm.common.view.custom.FlowLayout
+        android:id="@+id/flow_Layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:horizontalSpacing="10dp"
+        app:verticalSpacing="10dp" />
+
+    <SurfaceView
+        android:id="@+id/game_SurfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:visibility="gone" />
+</LinearLayout>

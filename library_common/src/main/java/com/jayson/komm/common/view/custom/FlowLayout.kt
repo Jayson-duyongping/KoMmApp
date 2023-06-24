@@ -89,7 +89,7 @@ class FlowLayout(context: Context, attrs: AttributeSet) : ViewGroup(context, att
                 background = shape
                 text = tag.name
                 setTextColor(randomColor)
-                setPadding(20, 0, 20, 10)
+                setPadding(20, 8, 20, 10)
                 setOnClickListener {
                     // 如果选中的不是上一次选中的View
                     if (this != lastSelectedView) {

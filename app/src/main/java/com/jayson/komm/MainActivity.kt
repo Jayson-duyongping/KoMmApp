@@ -46,17 +46,22 @@ class MainActivity : BaseActivity() {
     override fun initView() {
         super.initView()
         // ViewPager2 和 BottomNavigationView联动
-        binding.mainVp.adapter = mainVpAdapter
-        binding.mainVp.registerOnPageChangeCallback(pagerChangeCallback)
-        // 使彩色svg图标可显示
-        binding.mainBottomNav.itemIconTintList = null
-        binding.mainBottomNav.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.home_item -> binding.mainVp.currentItem = 0
-                R.id.girls_item -> binding.mainVp.currentItem = 1
-                R.id.me_item -> binding.mainVp.currentItem = 2
+        binding.mainVp.apply {
+            isUserInputEnabled = false // 禁止viewpager2左右滑动
+            adapter = mainVpAdapter
+            registerOnPageChangeCallback(pagerChangeCallback)
+        }
+        binding.mainBottomNav.apply {
+            itemIconTintList = null // 使彩色svg图标可显示
+            setOnItemSelectedListener {
+                // setCurrentItem(item,false)
+                when (it.itemId) {
+                    R.id.home_item -> binding.mainVp.setCurrentItem(0, false) // 禁止viewpager2滑动效果
+                    R.id.girls_item -> binding.mainVp.setCurrentItem(1, false)
+                    R.id.me_item -> binding.mainVp.setCurrentItem(2, false)
+                }
+                return@setOnItemSelectedListener true
             }
-            return@setOnItemSelectedListener true
         }
     }
 

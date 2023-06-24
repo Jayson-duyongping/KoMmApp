@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="card_colors">
+        <item>#FFCDD2</item>
+        <item>#F8BBD0</item>
+        <item>#E1BEE7</item>
+        <item>#D1C4E9</item>
+        <item>#C5CAE9</item>
+        <item>#BBDEFB</item>
+        <item>#B3E5FC</item>
+        <item>#B2DFDB</item>
+        <item>#C8E6C9</item>
+        <item>#DCEDC8</item>
+    </array>
+</resources>

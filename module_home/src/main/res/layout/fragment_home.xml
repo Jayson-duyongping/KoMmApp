@@ -1,13 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:padding="@dimen/common_padding">
+    android:orientation="vertical">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_tab_home" />
+        android:src="@drawable/ic_tab_home"
+        android:visibility="gone" />
 
-</FrameLayout>
+    <!--
+    app:tabIndicatorFullWidth，
+    设为 true，是 Indicator 充满 item 的宽度，
+    设为 false 是 Indicator 保持和 item 的内容宽度一致；
+    app:tabIndicatorColor 颜色
+    app:tabIndicatorHeight 高度
+    app:tabMode tab模式 scrollable可滚动，fixed固定
+    app:tabRippleColo 去点击水波纹
+    -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabGravity="fill"
+        app:tabIndicator="@drawable/tab_indicator"
+        app:tabIndicatorColor="@color/colorPrimaryPress"
+        app:tabIndicatorFullWidth="false"
+        app:tabIndicatorHeight="3dp"
+        app:tabMode="scrollable"
+        app:tabRippleColor="@android:color/transparent" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>

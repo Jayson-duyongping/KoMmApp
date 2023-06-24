@@ -108,7 +108,6 @@ abstract class BaseListFragment<T : Any> : Fragment() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun loadData() {
-        swipeRefreshLayout.isRefreshing = true
         isRefreshing = true
         lifecycleScope.launch(Dispatchers.IO) {
             getListData()?.let {
