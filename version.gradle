@@ -1,4 +1,11 @@
-ext{
+ext {
     kotlin_version = '1.7.0'
     paging_version = "3.1.1"
+
+    retrofit2_version = '2.9.0'
+    okhttp3_version = '4.9.0'
+
+    glide_version = "4.15.1"
+    glide_jp_version = "4.3.0"
+    PhotoView_version = "2.3.0"
 }

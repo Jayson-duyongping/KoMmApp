@@ -12,4 +12,66 @@
         <item>#C8E6C9</item>
         <item>#DCEDC8</item>
     </array>
+
+    <array name="popular_colors">
+        <item>#7986CA</item>
+        <item>#AFD7F7</item>
+        <item>#C8B4E1</item>
+        <item>#E6C9E1</item>
+        <item>#F4E6BA</item>
+    </array>
+
+    <!-- 这套配色给人简洁、大气的感觉，适合阅读、新闻等APP-->
+    <array name="gray_colors">
+        <item>#E1E1E1</item>
+        <item>#C8C8C8</item>
+        <item>#AFAFAF</item>
+        <item>#969696</item>
+        <item>#7D7D7D</item>
+    </array>
+
+    <!-- 这套配色给人温柔、浪漫的感觉，适合女性化的APP，如美妆、购物等-->
+    <array name="pink_colors">
+        <item>#F9B7FF</item>
+        <item>#F692CE</item>
+        <item>#F368E0</item>
+        <item>#E9199E</item>
+        <item>#9B0E5A</item>
+    </array>
+
+    <!-- 这套配色给人稳重、沉静的感觉，适合企业化的APP，如企业管理、金融等-->
+    <array name="blue_colors">
+        <item>#D9E3F0</item>
+        <item>#9BB2D4</item>
+        <item>#5F80B8</item>
+        <item>#2E4E7E</item>
+        <item>#001B54</item>
+    </array>
+
+    <!-- 这套配色给人自然、健康的感觉，适合生活方式、旅游等APP-->
+    <array name="green_colors">
+        <item>#C9E7CA</item>
+        <item>#A4D9AB</item>
+        <item>#7DC48B</item>
+        <item>#56B46E</item>
+        <item>#2EA058</item>
+    </array>
+
+    <!-- 这套配色给人活力、热情的感觉，适合运动、健康等APP-->
+    <array name="orange_colors">
+        <item>#F5A623</item>
+        <item>#F89E1F</item>
+        <item>#F5921D</item>
+        <item>#F4851B</item>
+        <item>#F27818</item>
+    </array>
+
+    <!-- 这套配色给人神秘、高贵的感觉，适合艺术、文化等APP-->
+    <array name="purple_colors">
+        <item>#F5F0FF</item>
+        <item>#E4D7FF</item>
+        <item>#C2A9FF</item>
+        <item>#9B7AE1</item>
+        <item>#724BB7</item>
+    </array>
 </resources>

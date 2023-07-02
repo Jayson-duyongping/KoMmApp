@@ -7,6 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.jayson.komm.common.base.BaseActivity
 import com.jayson.komm.common.base.BaseFragment
 import com.jayson.komm.home.databinding.FragmentHomeBinding
 import com.jayson.komm.home.ui.fragment.GameFragment
@@ -27,6 +28,7 @@ class HomeFragment : BaseFragment() {
     override fun initView(view: View) {
         super.initView(view)
         binding = FragmentHomeBinding.bind(view)
+        (activity as BaseActivity).setPaddingStatusBar(view)
         setupWithTabLayout(binding.tabLayout, binding.viewPager)
     }
 

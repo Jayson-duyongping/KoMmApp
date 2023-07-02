@@ -1,6 +1,7 @@
 package com.jayson.komm.girls
 
 import android.view.View
+import com.jayson.komm.common.base.BaseActivity
 import com.jayson.komm.common.base.BaseFragment
 import com.jayson.komm.girls.databinding.FragmentGirlsBinding
 
@@ -16,6 +17,7 @@ class GirlsFragment : BaseFragment() {
     override fun initView(view: View) {
         super.initView(view)
         binding = FragmentGirlsBinding.bind(view)
+        (activity as BaseActivity).setPaddingStatusBar(view)
         binding.verticalPv.initVerticalPager(dataList)
     }
 }

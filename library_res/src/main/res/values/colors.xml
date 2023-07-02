@@ -5,7 +5,69 @@
     <color name="colorPrimaryVariant">#FF6200EE</color>
 
     <color name="black">#FF000000</color>
+    <color name="black1">#FF333333</color>
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00000000</color>
     <color name="translucent">#22050505</color>
+
+    <!-- CardColors -->
+    <color name="cardColor1">#FFCDD2</color>
+    <color name="cardColor2">#F8BBD0</color>
+    <color name="cardColor3">#E1BEE7</color>
+    <color name="cardColor4">#D1C4E9</color>
+    <color name="cardColor5">#C5CAE9</color>
+    <color name="cardColor6">#BBDEFB</color>
+    <color name="cardColor7">#B3E5FC</color>
+    <color name="cardColor8">#B2DFDB</color>
+    <color name="cardColor9">#C8E6C9</color>
+    <color name="cardColor10">#DCEDC8</color>
+
+    <!-- PopularColors -->
+    <color name="popularColor1">#7986CA</color>
+    <color name="popularColor2">#AFD7F7</color>
+    <color name="popularColor3">#C8B4E1</color>
+    <color name="popularColor4">#E6C9E1</color>
+    <color name="popularColor5">#F4E6BA</color>
+
+    <!-- GrayColors - 这套配色给人简洁、大气的感觉，适合阅读、新闻等APP-->
+    <color name="grayColor1">#E1E1E1</color>
+    <color name="grayColor2">#C8C8C8</color>
+    <color name="grayColor3">#AFAFAF</color>
+    <color name="grayColor4">#969696</color>
+    <color name="grayColor5">#7D7D7D</color>
+
+    <!-- PinkColors - 这套配色给人温柔、浪漫的感觉，适合女性化的APP，如美妆、购物等-->
+    <color name="pinkColor1">#F9B7FF</color>
+    <color name="pinkColor2">#F692CE</color>
+    <color name="pinkColor3">#F368E0</color>
+    <color name="pinkColor4">#E9199E</color>
+    <color name="pinkColor5">#9B0E5A</color>
+
+    <!-- BlueColors - 这套配色给人稳重、沉静的感觉，适合企业化的APP，如企业管理、金融等-->
+    <color name="blueColor1">#D9E3F0</color>
+    <color name="blueColor2">#9BB2D4</color>
+    <color name="blueColor3">#5F80B8</color>
+    <color name="blueColor4">#2E4E7E</color>
+    <color name="blueColor5">#001B54</color>
+
+    <!-- GreenColors - 这套配色给人自然、健康的感觉，适合生活方式、旅游等APP-->
+    <color name="greenColor1">#C9E7CA</color>
+    <color name="greenColor2">#A4D9AB</color>
+    <color name="greenColor3">#7DC48B</color>
+    <color name="greenColor4">#56B46E</color>
+    <color name="greenColor5">#2EA058</color>
+
+    <!-- OrangeColors - 这套配色给人活力、热情的感觉，适合运动、健康等APP-->
+    <color name="orangeColor1">#F5A623</color>
+    <color name="orangeColor2">#F89E1F</color>
+    <color name="orangeColor3">#F5921D</color>
+    <color name="orangeColor4">#F4851B</color>
+    <color name="orangeColor5">#F27818</color>
+
+    <!-- PurpleColors - 这套配色给人神秘、高贵的感觉，适合艺术、文化等APP-->
+    <color name="purpleColor1">#F5F0FF</color>
+    <color name="purpleColor2">#E4D7FF</color>
+    <color name="purpleColor3">#C2A9FF</color>
+    <color name="purpleColor4">#9B7AE1</color>
+    <color name="purpleColor5">#724BB7</color>
 </resources>

@@ -17,6 +17,6 @@ class MmFragment : BaseFragment() {
     override fun initView(view: View) {
         super.initView(view)
         binding = FragmentMmBinding.bind(view)
-        activity?.replaceFragment(R.id.mm_container, MmListFrag())
+        replaceFragment(R.id.mm_container, MmListFrag())
     }
 }

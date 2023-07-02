@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 通用尺寸 -->
     <dimen name="common_margin">24dp</dimen>
+    <dimen name="common_margin_half">12dp</dimen>
     <dimen name="common_padding">16dp</dimen>
-    <dimen name="button_height">50dp</dimen>
+    <dimen name="common_padding_half">8dp</dimen>
+    <dimen name="common_radius">16dp</dimen>
+    <dimen name="common_radius_half">8dp</dimen>
+
+    <dimen name="common_row_height">50dp</dimen>
 
     <dimen name="common_title_size">16sp</dimen>
-    <dimen name="common_summary_size">12sp</dimen>
+    <dimen name="common_summary_size">14sp</dimen>
+    <dimen name="common_small_size">12sp</dimen>
 </resources>

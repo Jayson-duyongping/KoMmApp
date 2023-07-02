@@ -46,7 +46,7 @@ class RecommendFragment : BaseFragment() {
                 configCard(isImageBackGround = true, isShowText = true)
             }
         }
-        activity?.replaceFragment(R.id.recommend_container, RecommendListFrag())
+        replaceFragment(R.id.recommend_container, RecommendListFrag())
     }
 
     override fun onResume() {

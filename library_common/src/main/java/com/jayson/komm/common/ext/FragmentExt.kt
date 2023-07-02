@@ -15,6 +15,19 @@ fun FragmentActivity.replaceFragment(containerViewId: Int, fragment: Fragment, t
         .commit()
 }
 
+
+fun Fragment.replaceFragment(containerViewId: Int, fragment: Fragment) {
+    childFragmentManager.beginTransaction()
+        .replace(containerViewId, fragment)
+        .commit()
+}
+
+fun Fragment.replaceFragment(containerViewId: Int, fragment: Fragment, tag: String) {
+    childFragmentManager.beginTransaction()
+        .replace(containerViewId, fragment, tag)
+        .commit()
+}
+
 fun FragmentActivity.addFragment(containerViewId: Int, fragment: Fragment) {
     supportFragmentManager.beginTransaction()
         .add(containerViewId, fragment)
