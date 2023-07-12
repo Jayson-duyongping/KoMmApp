@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/common_padding_half"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    app:cardCornerRadius="@dimen/common_padding_half">
 
     <TextView
         android:id="@+id/card_title"
@@ -20,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:columnCount="2"
-        android:paddingTop="30dp"
         android:orientation="horizontal"
+        android:paddingTop="30dp"
         android:rowCount="2" />
 </androidx.cardview.widget.CardView>

@@ -3,4 +3,11 @@
     package="com.jayson.komm.common">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <application>
+        <activity
+            android:name=".view.page.ShowPictureActivity"
+            android:exported="false" />
+    </application>
+
 </manifest>

@@ -7,5 +7,5 @@ ext {
 
     glide_version = "4.15.1"
     glide_jp_version = "4.3.0"
-    PhotoView_version = "2.3.0"
+    photoView_version = "2.3.0"
 }

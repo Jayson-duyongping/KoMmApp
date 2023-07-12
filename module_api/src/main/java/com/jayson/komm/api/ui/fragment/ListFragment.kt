@@ -37,7 +37,7 @@ class ListFragment : BaseListFragment<Mm>() {
         return DataViewHolder(view)
     }
 
-    override fun bindDataViewHolder(holder: RecyclerView.ViewHolder, data: Mm?) {
+    override fun bindDataViewHolder(holder: RecyclerView.ViewHolder, data: Mm?, position: Int) {
         if (holder is DataViewHolder) {
             context?.let {
                 Glide.with(it)

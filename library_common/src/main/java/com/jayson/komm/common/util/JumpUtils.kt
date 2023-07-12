@@ -2,6 +2,7 @@ package com.jayson.komm.common.util
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import com.jayson.komm.common.R
 
 /**
@@ -14,10 +15,11 @@ object JumpUtils {
 
     private const val TAG = "JumpUtils"
 
-    fun startGoAction(activity: Activity?, action: String) {
+    @JvmStatic
+    fun startGoAction(activity: Activity?, intent: Intent) {
         kotlin.runCatching {
             activity?.apply {
-                startActivity(Intent(action))
+                startActivity(intent)
                 overridePendingTransition(R.anim.slide_enter_in_right, R.anim.slide_enter_out_left)
             }
         }.onFailure {
@@ -25,14 +27,27 @@ object JumpUtils {
         }
     }
 
-    fun startGoActivity(activity: Activity?, cls: Class<*>) {
+    @JvmStatic
+    fun startGoActivity(activity: Activity?, intent: Intent) {
         kotlin.runCatching {
             activity?.apply {
-                startActivity(Intent(activity, cls))
+                startActivity(intent)
                 overridePendingTransition(R.anim.slide_enter_in_right, R.anim.slide_enter_out_left)
             }
         }.onFailure {
             LogUtils.e(TAG, "startGoActivity, e:${it.message}")
         }
+    }
+
+    /**
+     * 应用信息界面
+     * @param activity
+     */
+    @JvmStatic
+    fun goApplicationInfo(activity: Activity) {
+        val localIntent = Intent()
+        localIntent.action = "android.settings.APPLICATION_DETAILS_SETTINGS"
+        localIntent.data = Uri.fromParts("package", activity.packageName, null)
+        activity.startActivity(localIntent)
     }
 }

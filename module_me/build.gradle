@@ -4,10 +4,14 @@ if(isModule.toBoolean()){
     apply plugin:'com.android.library'
 }
 apply from: rootProject.file('config.gradle')
+apply plugin: 'org.jetbrains.kotlin.android'
 
 dependencies {
     // library_common
     implementation project(':library_common')
     // library_res
     implementation project(':library_res')
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.4.+'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
 }

@@ -6,6 +6,7 @@ import android.view.View
 import com.jayson.komm.common.base.BaseFragment
 import com.jayson.komm.common.util.ToastUtil
 import com.jayson.komm.common.view.custom.FlowLayout
+import com.jayson.komm.home.R
 import com.jayson.komm.home.databinding.FragmentGameBinding
 
 
@@ -30,7 +31,7 @@ class GameFragment : BaseFragment() {
     )
 
     override fun getLayoutRes(): Int {
-        return com.jayson.komm.home.R.layout.fragment_game
+        return R.layout.fragment_game
     }
 
     override fun initView(view: View) {
@@ -42,15 +43,19 @@ class GameFragment : BaseFragment() {
     private fun initTagView() {
         binding.flowLayout.addTags(tags, object : FlowLayout.OnTagClickListener {
             override fun onTagClick(tag: FlowLayout.Tag) {
-                if (tag.linkUrl.isEmpty()) {
-                    ToastUtil.show(context, "暂无视频源")
-                    return
-                }
-                // 调用本机可使用的播放器
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setDataAndType(Uri.parse(tag.linkUrl), "video/*")
-                startActivity(intent)
+                tagClick(tag)
             }
         })
+    }
+
+    private fun tagClick(tag: FlowLayout.Tag) {
+        if (tag.linkUrl.isEmpty()) {
+            ToastUtil.show(context, "暂无视频源")
+            return
+        }
+        // 调用本机可使用的播放器
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.setDataAndType(Uri.parse(tag.linkUrl), "video/*")
+        startActivity(intent)
     }
 }

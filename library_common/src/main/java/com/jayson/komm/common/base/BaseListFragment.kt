@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.jayson.komm.common.R
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +32,8 @@ abstract class BaseListFragment<T : Any> : Fragment() {
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: RecyclerView.Adapter<*>
+    private var layoutManager: RecyclerView.LayoutManager? = null
+
     private var dataList: MutableList<T> = mutableListOf()
     private var isRefreshing = false
     private var isLoading = false
@@ -60,7 +64,7 @@ abstract class BaseListFragment<T : Any> : Fragment() {
         adapter = MoreListAdapter()
         recyclerView.let {
             it.itemAnimator = null
-            it.layoutManager = LinearLayoutManager(context)
+            it.layoutManager = layoutManager ?: LinearLayoutManager(context)
             it.adapter = adapter
             it.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -93,17 +97,61 @@ abstract class BaseListFragment<T : Any> : Fragment() {
      * 子类实现布局与绑定holder
      */
     abstract fun createDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder
-    abstract fun bindDataViewHolder(holder: RecyclerView.ViewHolder, data: T?)
+    abstract fun bindDataViewHolder(holder: RecyclerView.ViewHolder, data: T?, position: Int)
+
+    enum class LayoutManagerType {
+        Linear,
+        Grid,
+        StaggeredGrid
+    }
+
+    enum class LoadMoreType {
+        LOAD_MORE,
+        NO_DATA,
+        HIDE
+    }
 
     /**
-     * 设置不可刷新或加载更多
+     * 设置不可刷新或加载更多，一般在setupInit中实现
      */
-    open fun setRefreshOrLoadEnable(refreshEnable: Boolean = true, loadEnable: Boolean = true) {
+    open fun setRefreshOrLoadEnable(
+        refreshEnable: Boolean = true,
+        loadEnable: Boolean = true,
+        managerType: LayoutManagerType? = null,
+        layoutManager: RecyclerView.LayoutManager? = null
+    ) {
+        // 设置是否可刷新或加载
         swipeRefreshLayout.isEnabled = refreshEnable
         isEnableLoading = loadEnable
         if (!loadEnable) {
             currentLoadMoreState = LoadMoreType.HIDE
         }
+        // 设置LayoutManager样式
+        this.layoutManager = layoutManager ?: when (managerType) {
+            LayoutManagerType.Grid -> {
+                // 网格布局管理器
+                GridLayoutManager(context, 2)
+            }
+            LayoutManagerType.StaggeredGrid -> {
+                // 瀑布流布局管理器
+                StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL).apply {
+                    gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
+                }
+            }
+            else -> {
+                // 线性布局管理器
+                LinearLayoutManager(context).apply {
+                    orientation = LinearLayoutManager.VERTICAL;
+                }
+            }
+        }
+    }
+
+    /**
+     * 提供给外部刷新数据
+     */
+    open fun refreshData() {
+        loadData()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -144,12 +192,6 @@ abstract class BaseListFragment<T : Any> : Fragment() {
                 }
             }
         }
-    }
-
-    enum class LoadMoreType {
-        LOAD_MORE,
-        NO_DATA,
-        HIDE
     }
 
     /**
@@ -201,7 +243,7 @@ abstract class BaseListFragment<T : Any> : Fragment() {
             } else {
                 val data = dataList[position]
                 // 子类实现特性
-                bindDataViewHolder(holder, data)
+                bindDataViewHolder(holder, data , position)
             }
         }
 

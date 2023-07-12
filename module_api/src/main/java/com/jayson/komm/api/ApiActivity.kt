@@ -1,8 +1,9 @@
 package com.jayson.komm.api
 
+import android.content.Intent
 import com.jayson.komm.api.databinding.ActivityApiBinding
-import com.jayson.komm.api.ui.MmActivity
 import com.jayson.komm.api.ui.ListActivity
+import com.jayson.komm.api.ui.MmActivity
 import com.jayson.komm.api.ui.PagingActivity
 import com.jayson.komm.api.ui.WebActivity
 import com.jayson.komm.common.base.BaseActivity
@@ -19,16 +20,16 @@ class ApiActivity : BaseActivity() {
         setContentView(binding.root)
 
         binding.webBtn.setOnClickListener {
-            startGoActivity(this, WebActivity::class.java)
+            startGoActivity(this, Intent(this, WebActivity::class.java))
         }
         binding.waterFlowBtn.setOnClickListener {
-            startGoActivity(this, MmActivity::class.java)
+            startGoActivity(this, Intent(this, MmActivity::class.java))
         }
         binding.pagingBtn.setOnClickListener {
-            startGoActivity(this, PagingActivity::class.java)
+            startGoActivity(this, Intent(this, PagingActivity::class.java))
         }
         binding.newsBtn.setOnClickListener {
-            startGoActivity(this, ListActivity::class.java)
+            startGoActivity(this, Intent(this, ListActivity::class.java))
         }
     }
 }

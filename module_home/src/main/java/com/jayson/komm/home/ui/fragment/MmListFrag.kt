@@ -78,7 +78,7 @@ class MmListFrag : BaseListFragment<Card>() {
         return DataViewHolder(view)
     }
 
-    override fun bindDataViewHolder(holder: RecyclerView.ViewHolder, data: Card?) {
+    override fun bindDataViewHolder(holder: RecyclerView.ViewHolder, data: Card?, position: Int) {
         if (holder is DataViewHolder) {
             context?.let {
                 holder.titleTv.text = data?.title

@@ -110,7 +110,7 @@ class HorizontalCardListView : LinearLayout {
                 cardColors?.let {
                     setCardBackgroundColor(it[position % it.size])
                 }
-            }.addClickScale(0.95f, 50)
+            }.addClickScale {}
             if (isImageBackGround) {
                 holder.imageIv.setBackgroundResource(card.imageResource)
             }
