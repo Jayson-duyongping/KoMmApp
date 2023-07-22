@@ -21,9 +21,10 @@ dependencyResolutionManagement {
 rootProject.name = "KoMmApp"
 include ':app'
 include ':library_common'
+include ':library_res'
 include ':module_girls'
 include ':module_home'
 include ':module_me'
-include ':library_res'
-include ':tech_mvvm'
 include ':module_api'
+include ':tech_mvvm'
+include ':tech_dev'

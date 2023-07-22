@@ -19,7 +19,8 @@ class MeFragment : BaseFragment() {
         const val FILE_LIST = "fileList"
 
         private const val ACTION_MVVM = "com.jayson.komm.mvvm.Main"
-        private const val ACTION_MM = "com.jayson.komm.api.Main"
+        private const val ACTION_API = "com.jayson.komm.api.Main"
+        private const val ACTION_DEV = "com.jayson.komm.dev.Main"
     }
 
     private lateinit var binding: FragmentMeBinding
@@ -32,7 +33,8 @@ class MeFragment : BaseFragment() {
         super.initView(view)
         binding = FragmentMeBinding.bind(view)
         binding.mvvmBtn.addClickScale { startGoAction(activity, Intent(ACTION_MVVM)) }
-        binding.apiBtn.addClickScale { startGoAction(activity, Intent(ACTION_MM)) }
+        binding.apiBtn.addClickScale { startGoAction(activity, Intent(ACTION_API)) }
+        binding.devBtn.addClickScale { startGoAction(activity, Intent(ACTION_DEV)) }
         binding.pictureBtn.addClickScale {
             goLocalFileActivity(TYPE_PICTURE)
         }
