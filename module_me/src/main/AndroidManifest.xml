@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.jayson.komm.me">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- SDK30以后，MANAGE_EXTERNAL_STORAGE代替WRITE_EXTERNAL_STORAGE -->
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
 
     <application
         android:allowBackup="true"
@@ -10,12 +14,16 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:requestLegacyExternalStorage="true"
         android:theme="@style/Theme.KoMmApp">
         <activity
             android:name=".ui.page.LocalFolderActivity"
             android:exported="false" />
         <activity
             android:name=".ui.page.LocalFileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.page.ResourceActivity"
             android:exported="false" />
     </application>
 

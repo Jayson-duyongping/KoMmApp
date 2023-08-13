@@ -1,5 +1,6 @@
 package com.jayson.komm
 
+import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.jayson.komm.common.base.BaseActivity
@@ -39,6 +40,10 @@ class MainActivity : BaseActivity() {
 
     override fun setContentView() {
         super.setContentView()
+        // 主页不统一设置padding状态栏，里面有fragment需要沉浸式
+        findViewById<FrameLayout>(android.R.id.content).apply {
+            setPadding(0, 0, 0, 0);
+        }
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }

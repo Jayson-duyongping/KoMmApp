@@ -3,11 +3,11 @@ package com.jayson.komm.me
 import android.content.Intent
 import android.view.View
 import com.jayson.komm.common.base.BaseFragment
-import com.jayson.komm.common.ext.addClickScale
 import com.jayson.komm.common.util.JumpUtils.startGoAction
 import com.jayson.komm.common.util.JumpUtils.startGoActivity
 import com.jayson.komm.me.databinding.FragmentMeBinding
 import com.jayson.komm.me.ui.page.LocalFolderActivity
+import com.jayson.komm.me.ui.page.ResourceActivity
 
 class MeFragment : BaseFragment() {
 
@@ -32,17 +32,27 @@ class MeFragment : BaseFragment() {
     override fun initView(view: View) {
         super.initView(view)
         binding = FragmentMeBinding.bind(view)
-        binding.mvvmBtn.addClickScale { startGoAction(activity, Intent(ACTION_MVVM)) }
-        binding.apiBtn.addClickScale { startGoAction(activity, Intent(ACTION_API)) }
-        binding.devBtn.addClickScale { startGoAction(activity, Intent(ACTION_DEV)) }
-        binding.pictureBtn.addClickScale {
+        binding.mvvmBtn.setOnClickListener {
+            startGoAction(activity, Intent(ACTION_MVVM))
+        }
+        binding.apiBtn.setOnClickListener {
+            startGoAction(activity, Intent(ACTION_API))
+        }
+        binding.devBtn.setOnClickListener {
+            startGoAction(activity, Intent(ACTION_DEV))
+        }
+        binding.pictureBtn.setOnClickListener {
             goLocalFileActivity(TYPE_PICTURE)
         }
-        binding.videoBtn.addClickScale {
+        binding.videoBtn.setOnClickListener {
             goLocalFileActivity(TYPE_VIDEO)
         }
-        binding.audioBtn.addClickScale {
+        binding.audioBtn.setOnClickListener {
             goLocalFileActivity(TYPE_AUDIO)
+        }
+        binding.resourceBtn.setOnClickListener {
+            val intent = Intent(activity, ResourceActivity::class.java)
+            startGoActivity(activity, intent)
         }
     }
 

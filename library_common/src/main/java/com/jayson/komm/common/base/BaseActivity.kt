@@ -2,6 +2,7 @@ package com.jayson.komm.common.base
 
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import com.jayson.komm.common.R
@@ -29,6 +30,7 @@ abstract class BaseActivity : AppCompatActivity {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         immediateStatusBar()
+        setPaddingStatusBar(findViewById<FrameLayout>(android.R.id.content))
         setContentView()
         initView()
         initConfig()
@@ -38,7 +40,7 @@ abstract class BaseActivity : AppCompatActivity {
     /**
      * 设置跟布局android:fitsSystemWindows="true"，或加载View之后设置
      */
-    fun setPaddingStatusBar(view: View) {
+    open fun setPaddingStatusBar(view: View) {
         view.setPadding(0, getStatusBarHeight(), 0, 0);
     }
 
