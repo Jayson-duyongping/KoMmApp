@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.jayson.komm.common.base.BaseActivity
 import com.jayson.komm.databinding.ActivityMainBinding
-import com.jayson.komm.girls.GirlsFragment
+import com.jayson.komm.ent.EntFragment
 import com.jayson.komm.home.HomeFragment
 import com.jayson.komm.me.MeFragment
 import com.jayson.komm.ui.adapter.MainViewPagerAdapter
@@ -15,7 +15,7 @@ class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val fragmentList: List<Fragment> by lazy {
-        listOf(HomeFragment(), GirlsFragment(), MeFragment())
+        listOf(HomeFragment(), EntFragment(), MeFragment())
     }
 
     private val mainVpAdapter: MainViewPagerAdapter by lazy {
