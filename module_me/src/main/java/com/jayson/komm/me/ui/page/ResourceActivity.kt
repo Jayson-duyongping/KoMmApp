@@ -1,130 +1,277 @@
 package com.jayson.komm.me.ui.page
 
-import android.content.Intent
-import android.os.Environment
-import android.provider.Settings
+import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.lifecycleScope
 import com.jayson.komm.common.base.BaseActivity
-import com.jayson.komm.common.util.LogUtils
-import com.jayson.komm.common.util.ToastUtil
+import com.jayson.komm.common.ext.replaceFragment
+import com.jayson.komm.common.util.*
+import com.jayson.komm.data.bean.Classify
+import com.jayson.komm.data.manager.FileDataManager
+import com.jayson.komm.me.R
 import com.jayson.komm.me.databinding.ActivityResourceBinding
+import com.jayson.komm.me.ui.fragment.GroupDialogFragment
+import com.jayson.komm.me.ui.fragment.ResourceGridFrag
+import com.jayson.komm.me.ui.fragment.ResourceListFrag
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.util.*
 
 
 class ResourceActivity : BaseActivity() {
 
     companion object {
         private const val TAG = "ResourceActivity"
-
-        private const val RESOURCE_FILE_NAME = "KommResource"
-        private const val RESOURCE_HIDE_FILE_NAME = ".KommResource"
-        private const val SEPARATOR = "/"
-        private const val NOME_DIA = ".nomedia"
     }
 
-    private val resourcePath =
-        Environment.getExternalStorageDirectory().path + SEPARATOR + RESOURCE_FILE_NAME
-    private val resourceHidePath =
-        Environment.getExternalStorageDirectory().path + SEPARATOR + RESOURCE_HIDE_FILE_NAME
-
     private lateinit var binding: ActivityResourceBinding
+
+    private val gridFragment = ResourceGridFrag()
+    private val listFragment = ResourceListFrag()
+
+    private var scanFileDir: String? = null
+    private var pathStack = Stack<String>()
+
+    private val filePickerLauncher =
+        registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
+            // 处理选择的文件
+            LogUtils.d(TAG, "getContentLauncher, result: $uris")
+            lifecycleScope.launch {
+                for (uri in uris) {
+                    FileUtils.copyContentResolverUriToFileDir(
+                        contentResolver,
+                        uri,
+                        pathStack.peek()
+                    )
+                }
+                withContext(Dispatchers.Main) {
+                    updateData(pathStack.peek(), false)
+                }
+            }
+        }
 
     override fun initView() {
         super.initView()
         binding = ActivityResourceBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.showBtn.setOnClickListener {
-            // 显示
-            showFile()
-        }
-        binding.hideBtn.setOnClickListener {
-            // 隐藏
-            hideFile()
-        }
+        TitleBarUtils.setupWithMore(this, "资源库",
+            onBackListener = {
+                onBackPressed()
+            },
+            onMoreListener = {
+                // 新增
+                DialogUtils.showPopWindow(
+                    this,
+                    it,
+                    R.layout.layout_dialog_add,
+                    Pair(R.id.new_btn) {
+                        showNewCreateDialog()
+                    },
+                    Pair(R.id.upload_btn) {
+                        // 多选文件
+                        filePickerLauncher.launch("*/*")
+                    }
+                )
+            }
+        )
     }
 
     override fun initData() {
         super.initData()
-        if (!Environment.isExternalStorageManager()) {
-            val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
-            startActivity(intent)
-            return
-        }
-        scanImageFiles(File(resourceHidePath))
-    }
-
-    private fun scanImageFiles(folder: File) {
-        lifecycleScope.launch(Dispatchers.IO) {
-            val files = folder.listFiles() ?: return@launch
-            for (file in files) {
-                if (file.isDirectory) {
-                    // 递归遍历子文件夹
-                    scanImageFiles(file)
-                    LogUtils.d(TAG, "scanImageFiles, isDirectory:${file.name}")
-                } else {
-                    // 判断文件是否为图片文件
-                    if (isImageFile(file)) {
-                        // 扫描到图片文件
-                        LogUtils.d(TAG, "scanImageFiles, Image File:${file.parentFile?.name},${file.absolutePath}")
-                        // 进行相应操作
+        replaceFragment(R.id.res_folder_container, gridFragment)
+        replaceFragment(R.id.res_file_container, listFragment)
+        scanFileDir = intent.getStringExtra(FileDataManager.INTENT_TAG)
+        updateData(scanFileDir)
+        // NestedScrollView滚动监听
+        binding.contentSv.setOnScrollChangeListener { v: NestedScrollView, _: Int, scrollY: Int, _: Int, _: Int ->
+            if (scrollY == (v.getChildAt(0).measuredHeight - v.measuredHeight)) {
+                // 滚动到底部 - 执行底部加载的操作(因为会拦截recycleView的滑动到底部，所以需要主动调用)
+                if (!TitleBarUtils.isEditMode(this).first) {
+                    listFragment.handleLoadMore {
+                        // 加载更多布局出来了之后还要滑动到最底部
+                        binding.contentSv.post {
+                            binding.contentSv.fullScroll(View.FOCUS_DOWN)
+                        }
                     }
                 }
             }
         }
     }
 
-    private fun isImageFile(file: File): Boolean {
-        val name = file.name
-        val extension = name.substringAfterLast(".", "")
-        val imageExtensions = arrayOf("jpg", "jpeg", "png", "gif", "bmp")
-        for (imageExtension in imageExtensions) {
-            if (extension.equals(imageExtension, ignoreCase = true)) {
-                return true
-            }
-        }
-        return false
+    private fun showContentView() {
+        binding.emptyTv.visibility = View.GONE
+        binding.contentSv.visibility = View.VISIBLE
     }
 
-    private fun showFile() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            kotlin.runCatching {
-                File(resourceHidePath).let {
-                    // 删除之前的名为".nomedia"的空文件
-                    File(it, NOME_DIA).delete()
-                    // 从之前的.XXX改回XXX
-                    val newName: String = it.name.substring(1)
-                    val newFile = File(it.parentFile, newName)
-                    it.renameTo(newFile)
+    private fun showEmptyView() {
+        binding.contentSv.visibility = View.GONE
+        binding.emptyTv.visibility = View.VISIBLE
+    }
+
+    private fun showNewCreateDialog() {
+        DialogUtils.showInputDialog(
+            this,
+            "新建文件夹",
+            onConfirmClickListener = { inputStr ->
+                lifecycleScope.launch(Dispatchers.IO) {
+                    if (inputStr.isEmpty()) {
+                        showToast("输入为空")
+                        return@launch
+                    }
+                    kotlin.runCatching {
+                        val folder = File(pathStack.peek(), inputStr)
+                        if (folder.exists()) {
+                            showToast("文件已存在")
+                            return@launch
+                        }
+                        folder.mkdirs()
+                        withContext(Dispatchers.Main) {
+                            ToastUtil.show(this@ResourceActivity, "新建文件夹-$inputStr")
+                            updateData(pathStack.peek(), false)
+                        }
+                    }.onFailure {
+                        LogUtils.e(TAG, "showNewCreateDialog, e: $it")
+                    }
                 }
-                withContext(Dispatchers.Main) {
-                    ToastUtil.show(this@ResourceActivity, "文件已经设置为可显示")
-                }
-            }.onFailure {
-                LogUtils.e(TAG, "showFile, e:$it")
             }
+        )
+    }
+
+    private suspend fun showToast(message: String) {
+        withContext(Dispatchers.Main) {
+            ToastUtil.show(this@ResourceActivity, message)
         }
     }
 
-    private fun hideFile() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            kotlin.runCatching {
-                File(resourcePath).let {
-                    // 指定文件夹中创建一个名为".nomedia"的空文件，这会告诉系统该文件夹中不应该被媒体库扫描
-                    File(it, NOME_DIA).createNewFile()
-                    // 改名为.XXX实现隐藏
-                    val newName = "." + it.name
-                    val newFile = File(it.parentFile, newName)
-                    it.renameTo(newFile)
-                }
-                withContext(Dispatchers.Main) {
-                    ToastUtil.show(this@ResourceActivity, "文件已经设置为隐藏")
-                }
-            }.onFailure {
-                LogUtils.e(TAG, "hideFile, e:$it")
+    private fun setPathTitle(path: String) {
+        var showPath = path
+        if (path.contains(FileDataManager.resourceHidePath)) {
+            showPath = path.replace(FileDataManager.resourceHidePath, "")
+        }
+        if (path.contains("/")) {
+            showPath = showPath.replace("/", " ● ")
+        }
+        binding.pathTv.text = showPath
+    }
+
+    /**
+     * 刷新数据及页面
+     */
+    fun updateData(scanPath: String?, isAdd: Boolean = true) {
+        LogUtils.d(TAG, "updateData, scanPath: $scanPath")
+        if (scanPath == null) {
+            return
+        }
+        lifecycleScope.launch {
+            val scanAllFiles = FileDataManager.scanCurrentFiles(File(scanPath))
+            val folders = scanAllFiles.first
+            val files = scanAllFiles.second
+            if (isAdd) {
+                pathStack.push(scanPath)
             }
+            setPathTitle(scanPath)
+            if ((folders.size == 0) && (files.size == 0)) {
+                showEmptyView()
+                return@launch
+            }
+            showContentView()
+            binding.resFolderTv.visibility = if (folders.size != 0) View.VISIBLE else View.GONE
+            binding.resFileTv.visibility = if (files.size != 0) View.VISIBLE else View.GONE
+            gridFragment.updateData(folders)
+            listFragment.updateData(files)
+        }
+    }
+
+    /**
+     * 刷新当前数据及页面
+     */
+    fun updateCurrentPath() {
+        TitleBarUtils.handleEditMode(this@ResourceActivity)
+        updateData(pathStack.peek(), false)
+    }
+
+    fun showListEditMode(editData: List<Classify>) {
+        listFragment.apply {
+            setIsNeedItemAnim(false)
+            notifyItemRangeChanged()
+        }
+        TitleBarUtils.switchEdit(this, "请选择项目",
+            onCloseListener = {
+                listFragment.apply {
+                    setIsNeedItemAnim(false)
+                    setAllChecked(false)
+                    notifyItemRangeChanged()
+                }
+            },
+            onAllCheckedListener = {
+                listFragment.apply {
+                    setIsNeedItemAnim(false)
+                    setAllChecked(it)
+                    notifyItemRangeChanged()
+                }
+            },
+            onEditListener = {
+                val edits = listFragment.getEditingFiles()
+                if (edits.isEmpty()) {
+                    ToastUtil.show(this@ResourceActivity, "未选中文件")
+                    return@switchEdit
+                }
+                DialogUtils.showPopWindow(
+                    this,
+                    it,
+                    R.layout.layout_dialog_edit,
+                    Pair(R.id.move_btn) {
+                        GroupDialogFragment(scanFileDir).apply {
+                            setEditClassifies(editData)
+                            show(supportFragmentManager, "group_dialog")
+                        }
+                    },
+                    Pair(R.id.delete_btn) {
+                        lifecycleScope.launch {
+                            FileDataManager.deleteFiles(edits) {
+                                updateCurrentPath()
+                            }
+                        }
+                    },
+                )
+            }
+        )
+    }
+
+    fun showGridEditMode(editData: Classify?) {
+        editData ?: return
+        DialogUtils.showAlertDialog(
+            this,
+            R.layout.layout_dialog_edit,
+            Pair(R.id.move_btn) {
+                GroupDialogFragment(scanFileDir).apply {
+                    setEditClassifies(listOf(editData))
+                    show(supportFragmentManager, "group_dialog")
+                }
+            },
+            Pair(R.id.delete_btn) {
+                lifecycleScope.launch {
+                    FileDataManager.deleteFiles(listOf(editData)) {
+                        updateData(pathStack.peek(), false)
+                    }
+                }
+            }
+        )
+    }
+
+    override fun onBackPressed() {
+        kotlin.runCatching {
+            if (TitleBarUtils.handleEditMode(this)) {
+                return
+            }
+            pathStack.pop()
+            updateData(pathStack.peek(), false)
+        }.onFailure {
+            LogUtils.e(TAG, "onBackPressed, e:$it")
+            super.onBackPressed()
         }
     }
 }

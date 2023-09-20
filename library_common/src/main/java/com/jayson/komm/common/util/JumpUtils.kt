@@ -4,6 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import com.jayson.komm.common.R
+import com.jayson.komm.common.bean.FileInfo
+import com.jayson.komm.common.view.page.ShowMediaActivity
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.encodeToByteArray
+import kotlinx.serialization.protobuf.ProtoBuf
 
 /**
  * @Author: Jayson
@@ -49,5 +54,21 @@ object JumpUtils {
         localIntent.action = "android.settings.APPLICATION_DETAILS_SETTINGS"
         localIntent.data = Uri.fromParts("package", activity.packageName, null)
         activity.startActivity(localIntent)
+    }
+
+    @OptIn(ExperimentalSerializationApi::class)
+    @JvmStatic
+    fun goShowMediaActivity(activity: Activity?, position: Int, fileList: List<FileInfo>) {
+        kotlin.runCatching {
+            val intent = Intent(activity, ShowMediaActivity::class.java).apply {
+                putExtra(ShowMediaActivity.INTENT_POSITION, position)
+                // 将其序列化为字节数组,将字节数组添加到Intent中
+                val fileArray = ProtoBuf.encodeToByteArray(fileList)
+                putExtra(ShowMediaActivity.INTENT_FILES, fileArray)
+            }
+            activity?.startActivity(intent)
+        }.onFailure {
+            LogUtils.e(TAG, "goShowMediaActivity, e:${it.message}")
+        }
     }
 }

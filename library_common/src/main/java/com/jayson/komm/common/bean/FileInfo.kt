@@ -10,5 +10,6 @@ data class FileInfo(
     val height: Int = 0,
     val directory: String = "",
     val bucket: String = "",
-    val path: String = ""
+    val path: String = "",
+    val fileType: String = "",
 )

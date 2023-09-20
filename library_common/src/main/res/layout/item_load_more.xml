@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/load_tv"
+    android:id="@+id/more_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
     android:gravity="center"
+    android:hint="加载更多"
     android:padding="16dp"
     android:visibility="gone" />

@@ -118,7 +118,7 @@ class FolderListFrag : BaseListFragment<Pair<String, ArrayList<FileInfo>>>() {
                 .toMutableList()
             LogUtils.d(TAG, "fileList: $fileList")
             withContext(Dispatchers.Main) {
-                refreshData()
+                handleRefresh()
             }
         }
     }
@@ -134,7 +134,7 @@ class FolderListFrag : BaseListFragment<Pair<String, ArrayList<FileInfo>>>() {
     override fun createDataViewHolder(parent: ViewGroup): DataViewHolder {
         val view =
             LayoutInflater.from(parent.context)
-                .inflate(com.jayson.komm.common.R.layout.item_folder, parent, false)
+                .inflate(com.jayson.komm.common.R.layout.item_picture_folder, parent, false)
         return DataViewHolder(view)
     }
 

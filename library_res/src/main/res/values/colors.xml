@@ -70,4 +70,11 @@
     <color name="purpleColor3">#C2A9FF</color>
     <color name="purpleColor4">#9B7AE1</color>
     <color name="purpleColor5">#724BB7</color>
+
+    <!-- RedColors - 热烈、醒目、警告-->
+    <color name="redColor1">#FF0000</color>
+    <color name="redColor2">#FF3333</color>
+    <color name="redColor3">#CC0000</color>
+    <color name="redColor4">#FF6666</color>
+    <color name="redColor5">#990000</color>
 </resources>

@@ -5,26 +5,73 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="@dimen/common_padding"
     tools:context=".ui.page.ResourceActivity">
 
-    <LinearLayout
+    <include layout="@layout/common_title_bar" />
+
+    <TextView
+        android:id="@+id/path_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_padding"
+        android:layout_marginEnd="@dimen/common_padding"
+        android:layout_marginBottom="@dimen/common_padding"
+        android:ellipsize="middle"
+        android:gravity="center_vertical"
+        android:maxLines="1" />
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/show_btn"
-            style="@style/CommonButton"
-            android:layout_marginEnd="@dimen/common_padding_half"
-            android:layout_weight="1"
-            android:text="设置显示" />
+        <TextView
+            android:id="@+id/empty_tv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="空空如也~"
+            android:visibility="gone" />
 
-        <Button
-            android:id="@+id/hide_btn"
-            style="@style/CommonButton"
-            android:layout_marginStart="@dimen/common_padding_half"
-            android:layout_weight="1"
-            android:text="设置隐藏" />
-    </LinearLayout>
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/content_sv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/res_folder_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/common_padding"
+                    android:layout_marginEnd="@dimen/common_padding"
+                    android:text="文件夹"
+                    android:visibility="gone" />
+
+                <FrameLayout
+                    android:id="@+id/res_folder_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/common_padding_half" />
+
+                <TextView
+                    android:id="@+id/res_file_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/common_padding"
+                    android:layout_marginEnd="@dimen/common_padding"
+                    android:text="格式文件"
+                    android:visibility="gone" />
+
+                <FrameLayout
+                    android:id="@+id/res_file_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/common_padding_half" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </FrameLayout>
 </LinearLayout>

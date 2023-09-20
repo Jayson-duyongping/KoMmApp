@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:background="@drawable/shape_radius_top"
+    android:orientation="vertical">
+
+    <include layout="@layout/common_title_bar" />
+
+    <FrameLayout
+        android:id="@+id/panel_container"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
+
+    <Button
+        android:id="@+id/remove_btn"
+        style="@style/CommonButton"
+        android:layout_width="200dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/common_padding"
+        android:layout_marginBottom="@dimen/common_padding"
+        android:text="移动到此处" />
+</LinearLayout>

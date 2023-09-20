@@ -113,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/common_padding"
                     android:layout_marginBottom="@dimen/common_padding_half"
-                    android:text="文件管理"
+                    android:text="媒体库"
                     android:textSize="@dimen/common_summary_size" />
 
                 <LinearLayout
@@ -206,27 +206,37 @@
                     android:text="资源库"
                     android:textSize="@dimen/common_summary_size" />
 
-                <LinearLayout
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:orientation="horizontal">
+                    card_view:cardBackgroundColor="@color/popularColor1"
+                    card_view:cardCornerRadius="8dp">
 
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/resource_btn"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        card_view:cardBackgroundColor="@color/popularColor4"
-                        card_view:cardCornerRadius="8dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
+                            android:id="@+id/resource_btn"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:gravity="center"
                             android:text="资源库"
-                            android:textColor="@color/blueColor3" />
-                    </androidx.cardview.widget.CardView>
-                </LinearLayout>
+                            android:textColor="@color/white" />
+
+                        <TextView
+                            android:id="@+id/resource_mm_btn"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@color/popularColor4"
+                            android:gravity="center"
+                            android:text="M库"
+                            android:textColor="@color/white" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
             </LinearLayout>
         </com.jayson.komm.common.view.custom.StretchScrollView>
     </LinearLayout>

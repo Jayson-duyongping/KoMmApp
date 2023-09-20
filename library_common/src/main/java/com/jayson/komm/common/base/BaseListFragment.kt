@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.jayson.komm.common.R
+import com.jayson.komm.common.util.LogUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -26,55 +27,66 @@ abstract class BaseListFragment<T : Any> : Fragment() {
 
     companion object {
         private const val TAG = "BaseListFragment"
-        private const val VIEW_TYPE_LOAD_MORE = 1
     }
 
-    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: RecyclerView.Adapter<*>
+    private var swipeRefreshLayout: SwipeRefreshLayout? = null
+    private var recyclerView: RecyclerView? = null
+    private var moreLayout: TextView? = null
+    private var adapter: RecyclerView.Adapter<*>? = null
     private var layoutManager: RecyclerView.LayoutManager? = null
 
     private var dataList: MutableList<T> = mutableListOf()
     private var isRefreshing = false
     private var isLoading = false
 
+    // 是否可刷新
+    private var isEnableRefresh = true
+
     // 是否可加载
     private var isEnableLoading = true
 
     // 底部加载更多类型
-    private var currentLoadMoreState = LoadMoreType.LOAD_MORE
+    private var currentLoadMoreState = LoadMoreType.HIDE
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_base_list, container, false)
+        setupInit()
+        val view = if (isEnableRefresh) {
+            inflater.inflate(R.layout.fragment_base_refresh_list, container, false)
+        } else {
+            inflater.inflate(R.layout.fragment_base_list, container, false)
+        }
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout)
         recyclerView = view.findViewById(R.id.recycler_view)
+        moreLayout = view.findViewById(R.id.more_layout)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupInit()
-        swipeRefreshLayout.setOnRefreshListener {
+        swipeRefreshLayout?.setOnRefreshListener {
             loadData()
         }
-        adapter = MoreListAdapter()
-        recyclerView.let {
+        adapter = CusListAdapter()
+        recyclerView?.let {
             it.itemAnimator = null
             it.layoutManager = layoutManager ?: LinearLayoutManager(context)
             it.adapter = adapter
+            // 解决滑动卡顿
+            it.isNestedScrollingEnabled = false
             it.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-                    if (isEnableLoading && !recyclerView.canScrollVertically(1)) {
-                        // 滑动到底部，触发“加载更多”操作
-                        currentLoadMoreState = LoadMoreType.LOAD_MORE
-                        recyclerView.postDelayed({
-                            loadMoreData()
-                        }, 500)
+                    // 滑动到底部，触发“加载更多”操作
+                    if (isEnableLoading && (dy > 0) && (!recyclerView.canScrollVertically(1))) {
+                        if (currentLoadMoreState == LoadMoreType.NO_DATA) {
+                            return
+                        }
+                        updateLoadMareLayout(LoadMoreType.LOAD_MORE)
+                        loadMoreData()
                     }
                 }
             })
@@ -121,10 +133,10 @@ abstract class BaseListFragment<T : Any> : Fragment() {
         layoutManager: RecyclerView.LayoutManager? = null
     ) {
         // 设置是否可刷新或加载
-        swipeRefreshLayout.isEnabled = refreshEnable
+        isEnableRefresh = refreshEnable
         isEnableLoading = loadEnable
         if (!loadEnable) {
-            currentLoadMoreState = LoadMoreType.HIDE
+            updateLoadMareLayout(LoadMoreType.HIDE)
         }
         // 设置LayoutManager样式
         this.layoutManager = layoutManager ?: when (managerType) {
@@ -150,13 +162,35 @@ abstract class BaseListFragment<T : Any> : Fragment() {
     /**
      * 提供给外部刷新数据
      */
-    open fun refreshData() {
+    open fun handleRefresh() {
+        LogUtils.d(TAG, "handleRefresh")
         loadData()
     }
 
+    open fun handleLoadMore(loadMoreBeforeListener: () -> Unit) {
+        LogUtils.d(TAG, "handleLoadMore")
+        if (currentLoadMoreState == LoadMoreType.NO_DATA) {
+            return
+        }
+        updateLoadMareLayout(LoadMoreType.LOAD_MORE)
+        loadMoreBeforeListener.invoke()
+        recyclerView?.postDelayed({
+            loadMoreData()
+        }, 200)
+    }
+
+    open fun notifyItemRangeChanged() {
+        LogUtils.d(TAG, "notifyItemRangeChanged")
+        adapter?.notifyItemRangeChanged(0, dataList.size)
+    }
+
+    protected fun getRecyclerView(): RecyclerView? = recyclerView
+
     @SuppressLint("NotifyDataSetChanged")
     private fun loadData() {
+        LogUtils.d(TAG, "loadData")
         isRefreshing = true
+        updateLoadMareLayout(LoadMoreType.HIDE)
         lifecycleScope.launch(Dispatchers.IO) {
             getListData()?.let {
                 dataList.clear()
@@ -165,18 +199,19 @@ abstract class BaseListFragment<T : Any> : Fragment() {
                     if (it.isEmpty()) {
                         noData(0)
                     }
-                    adapter.notifyDataSetChanged()
-                    swipeRefreshLayout.isRefreshing = false
+                    adapter?.notifyDataSetChanged()
+                    swipeRefreshLayout?.isRefreshing = false
                     isRefreshing = false
                 }
             } ?: let {
-                swipeRefreshLayout.isRefreshing = false
+                swipeRefreshLayout?.isRefreshing = false
                 isRefreshing = false
             }
         }
     }
 
     private fun loadMoreData() {
+        LogUtils.d(TAG, "loadMoreData")
         isLoading = true
         lifecycleScope.launch(Dispatchers.IO) {
             getListData()?.let {
@@ -184,11 +219,13 @@ abstract class BaseListFragment<T : Any> : Fragment() {
                 dataList.addAll(it)
                 withContext(Dispatchers.Main) {
                     if (it.isEmpty()) {
-                        currentLoadMoreState = LoadMoreType.NO_DATA
+                        updateLoadMareLayout(LoadMoreType.NO_DATA)
                         noData(1)
+                        return@withContext
                     }
-                    adapter.notifyItemRangeInserted(startPosition, dataList.size)
+                    adapter?.notifyItemRangeInserted(startPosition, dataList.size)
                     isLoading = false
+                    updateLoadMareLayout(LoadMoreType.HIDE)
                 }
             }
         }
@@ -198,74 +235,51 @@ abstract class BaseListFragment<T : Any> : Fragment() {
      * 一个MoreListAdapter
      * --包含加载更多逻辑
      */
-    inner class MoreListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-        /**
-         * 加载更多Holder
-         */
-        inner class LoadMoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            fun bindData(loadMoreType: LoadMoreType) {
-                if (dataList.size == 0) {
-                    return
-                }
-                when (loadMoreType) {
-                    LoadMoreType.LOAD_MORE -> {
-                        itemView.visibility = View.VISIBLE
-                        itemView.findViewById<TextView>(R.id.load_tv)?.text = "加载更多"
-                    }
-                    LoadMoreType.NO_DATA -> {
-                        itemView.visibility = View.VISIBLE
-                        itemView.findViewById<TextView>(R.id.load_tv)?.text = "到底了"
-                    }
-                    LoadMoreType.HIDE -> {
-                        itemView.visibility = View.GONE
-                    }
-                }
-            }
-        }
+    inner class CusListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         /**
          * 创建不同的holder
          */
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            if (viewType == VIEW_TYPE_LOAD_MORE) {
-                val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_load_more, parent, false)
-                return LoadMoreViewHolder(view)
-            }
             // 子类实现特性
             return createDataViewHolder(parent)
         }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            if (holder is BaseListFragment<*>.MoreListAdapter.LoadMoreViewHolder) {
-                holder.bindData(currentLoadMoreState)
-            } else {
-                val data = dataList[position]
-                // 子类实现特性
-                bindDataViewHolder(holder, data , position)
-            }
-        }
-
-        override fun getItemViewType(position: Int): Int {
-            // 没有“加载更多”栏
-            return if (isShowLoadMore() && (position == itemCount - 1)) {
-                VIEW_TYPE_LOAD_MORE
-            } else {
-                super.getItemViewType(position)
-            }
+            val data = dataList[position]
+            // 子类实现特性
+            bindDataViewHolder(holder, data, position)
         }
 
         override fun getItemCount(): Int {
-            // 有“加载更多”栏则+1
-            return if(isShowLoadMore()){ dataList.size + 1 } else dataList.size
+            return dataList.size
         }
+    }
 
-        /**
-         * 是否显示“加载更多”栏
-         */
-        private fun isShowLoadMore(): Boolean {
-            return currentLoadMoreState != LoadMoreType.HIDE
+    /**
+     * 更新加载更多Layout
+     */
+    private fun updateLoadMareLayout(loadMoreType: LoadMoreType) {
+        LogUtils.d(TAG, "updateLoadMareLayout, loadMoreType:$loadMoreType")
+        currentLoadMoreState = loadMoreType
+        when (loadMoreType) {
+            LoadMoreType.LOAD_MORE -> {
+                moreLayout?.apply {
+                    visibility = View.VISIBLE
+                    text = "加载更多"
+                    recyclerView?.scrollToPosition((adapter?.itemCount ?: 1) - 1)
+                }
+            }
+            LoadMoreType.NO_DATA -> {
+                moreLayout?.apply {
+                    visibility = View.VISIBLE
+                    text = "到底了"
+                    recyclerView?.scrollToPosition((adapter?.itemCount ?: 1) - 1)
+                }
+            }
+            LoadMoreType.HIDE -> {
+                moreLayout?.visibility = View.GONE
+            }
         }
     }
 }

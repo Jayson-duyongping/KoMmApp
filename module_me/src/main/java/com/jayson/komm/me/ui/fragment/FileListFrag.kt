@@ -1,6 +1,5 @@
 package com.jayson.komm.me.ui.fragment
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.jayson.komm.common.base.BaseListFragment
 import com.jayson.komm.common.bean.FileInfo
-import com.jayson.komm.common.view.page.ShowPictureActivity
+import com.jayson.komm.common.util.JumpUtils
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.encodeToByteArray
-import kotlinx.serialization.protobuf.ProtoBuf
 
 @OptIn(ExperimentalSerializationApi::class)
 class FileListFrag : BaseListFragment<FileInfo>() {
@@ -37,7 +34,7 @@ class FileListFrag : BaseListFragment<FileInfo>() {
      */
     fun refreshData(files: ArrayList<FileInfo>) {
         fileList = files
-        refreshData()
+        handleRefresh()
     }
 
     override fun getListData(): List<FileInfo> {
@@ -68,13 +65,7 @@ class FileListFrag : BaseListFragment<FileInfo>() {
                         .placeholder(com.jayson.komm.res.R.mipmap.placeholder)
                         .into(holder.imgIv)
                     holder.imgIv.setOnClickListener {
-                        val intent = Intent(activity, ShowPictureActivity::class.java).apply {
-                            putExtra("position", position)
-                            // 将其序列化为字节数组,将字节数组添加到Intent中
-                            val fileList = ProtoBuf.encodeToByteArray(fileList)
-                            putExtra("pictureList", fileList)
-                        }
-                        startActivity(intent)
+                        JumpUtils.goShowMediaActivity(activity, position, fileList)
                     }
                 }
             }

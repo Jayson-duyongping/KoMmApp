@@ -3,10 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.jayson.komm.api">
 
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
-
     <application android:networkSecurityConfig="@xml/net_config">
         <activity
             android:name=".ApiActivity"

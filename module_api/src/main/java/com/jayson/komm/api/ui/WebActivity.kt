@@ -16,8 +16,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.jayson.komm.api.databinding.ActivityWebBinding
-import com.jayson.komm.api.databinding.LayoutPhotoBinding
 import com.jayson.komm.common.base.BaseActivity
+import com.jayson.komm.common.databinding.LayoutMediaBinding
 import com.jayson.komm.common.util.DownLoadUtils.downloadImage
 import com.jayson.komm.common.util.LogUtils
 import com.jayson.komm.common.view.custom.FlowLayout
@@ -160,11 +160,11 @@ class WebActivity : BaseActivity() {
      */
     private fun viewPicture(imageUrl: String) {
         val dialog = Dialog(this, R.style.Theme_Black_NoTitleBar_Fullscreen)
-        val photoBinding = LayoutPhotoBinding.inflate(layoutInflater)
+        val photoBinding = LayoutMediaBinding.inflate(layoutInflater)
         dialog.setContentView(photoBinding.root)
         Glide.with(this)
             .load(imageUrl)
-            .into(photoBinding.photoView)
+            .into(photoBinding.imagePv)
         dialog.show()
     }
 

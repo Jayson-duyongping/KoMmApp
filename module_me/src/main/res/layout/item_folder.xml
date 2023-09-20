@@ -1,0 +1,20 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/folder_card"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_margin="@dimen/common_padding_half"
+    card:cardCornerRadius="@dimen/common_padding_half">
+
+    <TextView
+        android:id="@+id/folder_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_margin="@dimen/common_padding_half"
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:layout_gravity="center"
+        android:textSize="@dimen/common_summary_size" />
+
+</androidx.cardview.widget.CardView>

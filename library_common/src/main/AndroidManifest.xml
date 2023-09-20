@@ -1,13 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.jayson.komm.common">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <application>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <!-- SDK30以后，MANAGE_EXTERNAL_STORAGE代替WRITE_EXTERNAL_STORAGE -->
+    <uses-permission
+        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+
+    <application android:requestLegacyExternalStorage="true">
         <activity
-            android:name=".view.page.ShowPictureActivity"
+            android:name=".view.page.ShowMediaActivity"
             android:exported="false" />
+
+        <!-- Android N对访问文件权限收回，按照Android N的要求，若要在应用间共享文件，您应发送一项 content://URI，并授予 URI 临时访问权限。-->
+        <!-- 而进行此授权的最简单方式是使用 FileProvider类。-->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.jayson.komm.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

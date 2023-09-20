@@ -5,6 +5,7 @@ import android.view.View
 import com.jayson.komm.common.base.BaseFragment
 import com.jayson.komm.common.util.JumpUtils.startGoAction
 import com.jayson.komm.common.util.JumpUtils.startGoActivity
+import com.jayson.komm.data.manager.FileDataManager
 import com.jayson.komm.me.databinding.FragmentMeBinding
 import com.jayson.komm.me.ui.page.LocalFolderActivity
 import com.jayson.komm.me.ui.page.ResourceActivity
@@ -51,8 +52,16 @@ class MeFragment : BaseFragment() {
             goLocalFileActivity(TYPE_AUDIO)
         }
         binding.resourceBtn.setOnClickListener {
-            val intent = Intent(activity, ResourceActivity::class.java)
-            startGoActivity(activity, intent)
+            Intent(activity, ResourceActivity::class.java).apply {
+                putExtra(FileDataManager.INTENT_TAG, FileDataManager.resourceMaHidePath)
+                startGoActivity(activity, this)
+            }
+        }
+        binding.resourceMmBtn.setOnClickListener {
+            Intent(activity, ResourceActivity::class.java).apply {
+                putExtra(FileDataManager.INTENT_TAG, FileDataManager.resourceMsHidePath)
+                startGoActivity(activity, this)
+            }
         }
     }
 
