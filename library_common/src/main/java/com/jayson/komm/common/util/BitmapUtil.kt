@@ -85,6 +85,7 @@ object BitmapUtil {
 
     /**
      * 获取视频缩缩略图(耗时，需要开线程)
+     * -本以为获取视频缩略图很麻烦，需要这样获取，但实际上Glide直接加载路径就可以，NB
      */
     @JvmStatic
     suspend fun getVideoThumbnail(videoPath: String): Bitmap? {

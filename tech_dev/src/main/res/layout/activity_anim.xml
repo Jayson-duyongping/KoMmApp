@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/a_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ff8877"
+        android:padding="8dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/banner_icon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:padding="7.5dp"
+            android:scaleType="fitXY"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_tab_girls" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/banner_icon"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/banner_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="诚邀您参与使用体验调研"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/banner_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="点击立即参与点点击立即参与点点击立即参与点点击立即参与点点击立即参与点点击立即参与点点击立即参与点点击立即参与点"
+                android:textSize="14dp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/other_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/b_card"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="#ffaa23"
+            android:gravity="center"
+            android:orientation="vertical" />
+
+        <LinearLayout
+            android:id="@+id/c_card"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="#f4dd55"
+            android:gravity="center"
+            android:orientation="vertical" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/common_padding">
+
+            <Button
+                android:id="@+id/show_btn"
+                style="@style/CommonButton"
+                android:text="显示" />
+
+            <Button
+                android:id="@+id/hide_btn"
+                style="@style/CommonButton"
+                android:layout_marginTop="@dimen/common_padding"
+                android:text="隐藏" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

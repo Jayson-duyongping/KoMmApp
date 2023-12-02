@@ -51,7 +51,7 @@ class ResourceGridFrag : BaseListFragment<Classify>() {
     override fun createDataViewHolder(parent: ViewGroup): DataViewHolder {
         val view =
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_folder, parent, false)
+                .inflate(R.layout.item_resource_folder, parent, false)
         return DataViewHolder(view)
     }
 

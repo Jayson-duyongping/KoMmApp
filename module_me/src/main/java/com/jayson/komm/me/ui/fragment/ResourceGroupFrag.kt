@@ -84,7 +84,7 @@ class ResourceGroupFrag(private val scanFileDir: String?) : BaseListFragment<Cla
     override fun createDataViewHolder(parent: ViewGroup): DataViewHolder {
         val view =
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_file, parent, false)
+                .inflate(R.layout.item_resource_file, parent, false)
         return DataViewHolder(view)
     }
 

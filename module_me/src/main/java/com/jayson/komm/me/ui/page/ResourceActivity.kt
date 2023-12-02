@@ -1,5 +1,6 @@
 package com.jayson.komm.me.ui.page
 
+import android.Manifest
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.NestedScrollView
@@ -25,6 +26,9 @@ class ResourceActivity : BaseActivity() {
 
     companion object {
         private const val TAG = "ResourceActivity"
+
+        private const val manageDocumentPermission = Manifest.permission.MANAGE_DOCUMENTS
+        private const val manageDocumentRequestCode = 0x00001
     }
 
     private lateinit var binding: ActivityResourceBinding
@@ -35,13 +39,31 @@ class ResourceActivity : BaseActivity() {
     private var scanFileDir: String? = null
     private var pathStack = Stack<String>()
 
-    private val filePickerLauncher =
+    private val copyFilePickerLauncher =
         registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
             // 处理选择的文件
-            LogUtils.d(TAG, "getContentLauncher, result: $uris")
+            LogUtils.d(TAG, "copyFilePickerLauncher, result: $uris")
             lifecycleScope.launch {
                 for (uri in uris) {
                     FileUtils.copyContentResolverUriToFileDir(
+                        contentResolver,
+                        uri,
+                        pathStack.peek()
+                    )
+                }
+                withContext(Dispatchers.Main) {
+                    updateData(pathStack.peek(), false)
+                }
+            }
+        }
+
+    private val moveFilePickerLauncher =
+        registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
+            // 处理选择的文件
+            LogUtils.d(TAG, "moveFilePickerLauncher, result: $uris")
+            lifecycleScope.launch {
+                for (uri in uris) {
+                    FileUtils.moveContentResolverUriToFileDir(
                         contentResolver,
                         uri,
                         pathStack.peek()
@@ -71,8 +93,12 @@ class ResourceActivity : BaseActivity() {
                         showNewCreateDialog()
                     },
                     Pair(R.id.upload_btn) {
-                        // 多选文件
-                        filePickerLauncher.launch("*/*")
+                        // 上传-copy
+                        copyFilePickerLauncher.launch("*/*")
+                    },
+                    Pair(R.id.move_btn) {
+                        // 移动-move
+                        moveFilePickerLauncher.launch("*/*")
                     }
                 )
             }
@@ -193,7 +219,7 @@ class ResourceActivity : BaseActivity() {
         updateData(pathStack.peek(), false)
     }
 
-    fun showListEditMode(editData: List<Classify>) {
+    fun showListEditMode() {
         listFragment.apply {
             setIsNeedItemAnim(false)
             notifyItemRangeChanged()
@@ -225,7 +251,7 @@ class ResourceActivity : BaseActivity() {
                     R.layout.layout_dialog_edit,
                     Pair(R.id.move_btn) {
                         GroupDialogFragment(scanFileDir).apply {
-                            setEditClassifies(editData)
+                            setEditClassifies(listFragment.getEditingFiles())
                             show(supportFragmentManager, "group_dialog")
                         }
                     },

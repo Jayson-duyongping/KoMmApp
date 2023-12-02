@@ -22,4 +22,13 @@
         android:clickable="true"
         android:foreground="?attr/selectableItemBackground"
         android:text="上传" />
+
+    <Button
+        android:id="@+id/move_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:text="移至" />
 </LinearLayout>

@@ -11,14 +11,20 @@
         android:padding="@dimen/common_padding">
 
         <Button
-            android:id="@+id/service_btn"
+            android:id="@+id/job_btn"
             style="@style/CommonButton"
-            android:text="服务启动相关" />
+            android:text="JobScheduler" />
 
         <Button
-            android:id="@+id/anim_btn"
+            android:id="@+id/alarm_btn"
             style="@style/CommonButton"
             android:layout_marginTop="20dp"
-            android:text="动画相关" />
+            android:text="AlarmManager" />
+
+        <Button
+            android:id="@+id/work_btn"
+            style="@style/CommonButton"
+            android:layout_marginTop="20dp"
+            android:text="WorkManager" />
     </LinearLayout>
 </LinearLayout>

@@ -12,10 +12,10 @@
         android:requestLegacyExternalStorage="true"
         android:theme="@style/Theme.KoMmApp">
         <activity
-            android:name=".ui.page.LocalFolderActivity"
+            android:name=".ui.page.MediaFolderActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.page.LocalFileActivity"
+            android:name=".ui.page.MediaFileActivity"
             android:exported="false" />
         <activity
             android:name=".ui.page.ResourceActivity"

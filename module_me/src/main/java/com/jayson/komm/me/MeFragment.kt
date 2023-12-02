@@ -7,16 +7,16 @@ import com.jayson.komm.common.util.JumpUtils.startGoAction
 import com.jayson.komm.common.util.JumpUtils.startGoActivity
 import com.jayson.komm.data.manager.FileDataManager
 import com.jayson.komm.me.databinding.FragmentMeBinding
-import com.jayson.komm.me.ui.page.LocalFolderActivity
+import com.jayson.komm.me.ui.page.MediaFolderActivity
 import com.jayson.komm.me.ui.page.ResourceActivity
 
 class MeFragment : BaseFragment() {
 
     companion object {
         const val FILE_TYPE = "fileType"
-        const val TYPE_PICTURE = "picture"
-        const val TYPE_VIDEO = "video"
-        const val TYPE_AUDIO = "audio"
+        const val TYPE_IMAGE = "Image"
+        const val TYPE_VIDEO = "Video"
+        const val TYPE_AUDIO = "Audio"
         const val FILE_LIST = "fileList"
 
         private const val ACTION_MVVM = "com.jayson.komm.mvvm.Main"
@@ -43,7 +43,7 @@ class MeFragment : BaseFragment() {
             startGoAction(activity, Intent(ACTION_DEV))
         }
         binding.pictureBtn.setOnClickListener {
-            goLocalFileActivity(TYPE_PICTURE)
+            goLocalFileActivity(TYPE_IMAGE)
         }
         binding.videoBtn.setOnClickListener {
             goLocalFileActivity(TYPE_VIDEO)
@@ -66,7 +66,7 @@ class MeFragment : BaseFragment() {
     }
 
     private fun goLocalFileActivity(typeName: String) {
-        val intent = Intent(activity, LocalFolderActivity::class.java).apply {
+        val intent = Intent(activity, MediaFolderActivity::class.java).apply {
             putExtra(FILE_TYPE, typeName)
         }
         startGoActivity(activity, intent)

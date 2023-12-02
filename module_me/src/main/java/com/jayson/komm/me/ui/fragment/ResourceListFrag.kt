@@ -1,6 +1,5 @@
 package com.jayson.komm.me.ui.fragment
 
-import android.graphics.Bitmap
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +8,6 @@ import android.view.animation.AnimationUtils
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.jayson.komm.common.base.BaseListFragment
@@ -21,9 +19,6 @@ import com.jayson.komm.common.util.TitleBarUtils
 import com.jayson.komm.data.bean.Classify
 import com.jayson.komm.me.R
 import com.jayson.komm.me.ui.page.ResourceActivity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
 
 class ResourceListFrag : BaseListFragment<Classify>() {
@@ -35,9 +30,6 @@ class ResourceListFrag : BaseListFragment<Classify>() {
     private var scanFolders = mutableListOf<Classify>()
     private var currentLoadedFiles = mutableListOf<Classify>()
     private var isNeedItemAnim = false
-
-    // 添加一个缓存的视频缩略图的HashMap对象(为了解决重复耗时处理或adapter.notifyItemRangeChanged重新处理)
-    private val videoThumbnailCache = HashMap<String, Bitmap?>()
 
     override fun setupInit() {
         setRefreshOrLoadEnable(
@@ -84,7 +76,7 @@ class ResourceListFrag : BaseListFragment<Classify>() {
     override fun createDataViewHolder(parent: ViewGroup): DataViewHolder {
         val view =
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_file, parent, false)
+                .inflate(R.layout.item_resource_file, parent, false)
         return DataViewHolder(view)
     }
 
@@ -124,7 +116,7 @@ class ResourceListFrag : BaseListFragment<Classify>() {
                         return@setOnLongClickListener false
                     }
                     LogUtils.d(TAG, "setOnLongClickListener")
-                    mActivity.showListEditMode(getEditingFiles())
+                    mActivity.showListEditMode()
                     return@setOnLongClickListener true
                 }
             }
@@ -160,30 +152,12 @@ class ResourceListFrag : BaseListFragment<Classify>() {
     private fun setFileIv(fileIv: ImageView, data: Classify) {
         val type = data.fileType ?: ""
         val path = data.path ?: ""
-        if (type.contains("image")) {
-            // 获取图片缩略图
+        if ((type.contains("image")) || (type.contains("video"))) {
+            // 获取图片或视频缩略图
             Glide.with(this)
                 .load(Uri.fromFile(File(path)))
                 .override(100, 100)
                 .into(fileIv)
-        } else if (type.contains("video")) {
-            // 先从map缓存中取出，缓存中没有再生成获取
-            if (videoThumbnailCache.containsKey(data.name)) {
-                val cachedThumbnail = videoThumbnailCache[data.name]
-                fileIv.setImageBitmap(cachedThumbnail)
-            } else {
-                // 默认先生成缩略图
-                val text = type.split("/")[0]
-                fileIv.setImageBitmap(BitmapUtil.makeBitmapWithText(text.uppercase()))
-                // 获取视频缩略图 - 有些耗时，看后期怎么优化
-                lifecycleScope.launch {
-                    val thumbnail = BitmapUtil.getVideoThumbnail(path)
-                    data.name?.let { videoThumbnailCache.put(it, thumbnail) }
-                    withContext(Dispatchers.Main) {
-                        thumbnail?.let { fileIv.setImageBitmap(it) }
-                    }
-                }
-            }
         } else {
             // 获取其他文件的生成缩略图
             val text = type.split("/")[0]

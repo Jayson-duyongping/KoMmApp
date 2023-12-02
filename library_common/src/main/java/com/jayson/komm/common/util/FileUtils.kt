@@ -13,6 +13,9 @@ object FileUtils {
 
     private const val TAG = "FileUtils"
 
+    /**
+     * ContentResolver-uri复制操作，可复制上传所有文件
+     */
     @JvmStatic
     suspend fun copyContentResolverUriToFileDir(
         contentResolver: ContentResolver,
@@ -33,7 +36,7 @@ object FileUtils {
                     // :必须转成其他符号，否则对文件的操作会有问题
                     name = name.replace(":", "_")
                 }
-                LogUtils.d(TAG, "getContentLauncher, name: $name")
+                LogUtils.d(TAG, "copyContentResolverUriToFileDir, name: $name")
                 // 使用FileOutputStream将文件复制到指定位置
                 contentResolver.openInputStream(uri)?.use { inputStream ->
                     FileOutputStream(File(destinationDir, name)).use { outputStream ->
@@ -42,7 +45,46 @@ object FileUtils {
                 }
             }
         }.onFailure {
-            LogUtils.e(TAG, "getContentLauncher, e: $it")
+            LogUtils.e(TAG, "copyContentResolverUriToFileDir, e: $it")
+        }
+    }
+
+    /**
+     * ContentResolver-uri移动操作，先复制，再删除，“最近文件”中是删除不了的，只能复制
+     */
+    @JvmStatic
+    suspend fun moveContentResolverUriToFileDir(
+        contentResolver: ContentResolver,
+        uri: Uri,
+        destinationDir: String
+    ) {
+        kotlin.runCatching {
+            withContext(Dispatchers.IO) {
+                LogUtils.d(TAG, "moveContentResolverUriToFileDir, uri: $uri")
+                // 获取后缀格式
+                val mimeType = contentResolver.getType(uri)
+                val extension =
+                    MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+                // 获取并修改名字
+                var name = uri.path ?: ""
+                if (name.contains("/")) {
+                    val names = name.split("/")
+                    name = "${names[names.size - 1]}.$extension"
+                    // :必须转成其他符号，否则对文件的操作会有问题
+                    name = name.replace(":", "_")
+                }
+                LogUtils.d(TAG, "moveContentResolverUriToFileDir, name: $name")
+                // 使用FileOutputStream将文件复制到指定位置
+                contentResolver.openInputStream(uri)?.use { inputStream ->
+                    FileOutputStream(File(destinationDir, name)).use { outputStream ->
+                        inputStream.copyTo(outputStream)
+                    }
+                }
+                // 删除原文件，达到移动效果
+                contentResolver.delete(uri,null,null)
+            }
+        }.onFailure {
+            LogUtils.e(TAG, "moveContentResolverUriToFileDir, e: $it")
         }
     }
 
@@ -74,8 +116,14 @@ object FileUtils {
         kotlin.runCatching {
             withContext(Dispatchers.IO) {
                 val sourceFile = File(sourcePath)
-                val destinationFile = File(destinationPath)
-                sourceFile.renameTo(destinationFile)
+                val destinationFile = File(destinationPath, sourceFile.name)
+                val success = sourceFile.renameTo(destinationFile)
+                if (!success) {
+                    LogUtils.e(
+                        TAG,
+                        "moveFile, Failed to move file from $sourcePath to $destinationPath"
+                    )
+                }
             }
         }.onFailure {
             LogUtils.e(TAG, "moveFile, e:$it")
