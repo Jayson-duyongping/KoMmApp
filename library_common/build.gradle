@@ -34,6 +34,11 @@ dependencies {
     api "com.squareup.retrofit2:converter-scalars:$retrofit2_version"
     api "com.squareup.retrofit2:adapter-rxjava2:$retrofit2_version"
     api "com.squareup.okhttp3:logging-interceptor:$okhttp3_version"
+    //room
+    kapt 'androidx.room:room-compiler:2.5.2'
+    api 'androidx.room:room-runtime:2.5.2'
+    api 'androidx.room:room-ktx:2.5.2'
+
     // glide支持下载 + 高斯模糊
     api "com.github.bumptech.glide:glide:$glide_version"
     api "jp.wasabeef:glide-transformations:$glide_jp_version"

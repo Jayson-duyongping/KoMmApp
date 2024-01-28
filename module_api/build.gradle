@@ -11,4 +11,6 @@ dependencies {
     implementation project(':library_common')
     // library_res
     implementation project(':library_res')
+    //room - (具体应用的模块需要单独加这个)
+    kapt 'androidx.room:room-compiler:2.5.2'
 }

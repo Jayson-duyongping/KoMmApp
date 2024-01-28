@@ -2,10 +2,7 @@ package com.jayson.komm.api
 
 import android.content.Intent
 import com.jayson.komm.api.databinding.ActivityApiBinding
-import com.jayson.komm.api.ui.ListActivity
-import com.jayson.komm.api.ui.MmActivity
-import com.jayson.komm.api.ui.PagingActivity
-import com.jayson.komm.api.ui.WebActivity
+import com.jayson.komm.api.view.*
 import com.jayson.komm.common.base.BaseActivity
 import com.jayson.komm.common.util.JumpUtils.startGoActivity
 
@@ -30,6 +27,9 @@ class ApiActivity : BaseActivity() {
         }
         binding.newsBtn.setOnClickListener {
             startGoActivity(this, Intent(this, ListActivity::class.java))
+        }
+        binding.filmApiBtn.setOnClickListener {
+            startGoActivity(this, Intent(this, FilmActivity::class.java))
         }
     }
 }

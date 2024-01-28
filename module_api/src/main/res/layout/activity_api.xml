@@ -34,5 +34,11 @@
             style="@style/CommonButton"
             android:layout_marginTop="20dp"
             android:text="列表页面" />
+
+        <Button
+            android:id="@+id/film_api_btn"
+            style="@style/CommonButton"
+            android:layout_marginTop="20dp"
+            android:text="影视数据Api" />
     </LinearLayout>
 </LinearLayout>

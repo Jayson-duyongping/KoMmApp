@@ -1,8 +1,8 @@
-package com.jayson.komm.api.ui
+package com.jayson.komm.api.view
 
 import com.jayson.komm.api.R
 import com.jayson.komm.api.databinding.ActivityListBinding
-import com.jayson.komm.api.ui.fragment.ListFragment
+import com.jayson.komm.api.view.fragment.ListFragment
 import com.jayson.komm.common.base.BaseActivity
 import com.jayson.komm.common.ext.replaceFragment
 

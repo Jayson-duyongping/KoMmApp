@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.WebActivity">
+    tools:context=".view.WebActivity">
 
     <com.jayson.komm.common.view.custom.FlowLayout
         android:id="@+id/flowLayout"

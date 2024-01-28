@@ -1,4 +1,4 @@
-package com.jayson.komm.api.ui.fragment
+package com.jayson.komm.api.view.fragment
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.jayson.komm.api.R
 import com.jayson.komm.api.bean.Mm
-import com.jayson.komm.api.repo.MmHttpService
+import com.jayson.komm.api.net.MmHttpService
 import com.jayson.komm.common.base.BaseListFragment
 
 class ListFragment : BaseListFragment<Mm>() {

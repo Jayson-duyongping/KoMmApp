@@ -1,4 +1,4 @@
-package com.jayson.komm.api.ui
+package com.jayson.komm.api.view
 
 import android.Manifest
 import android.R

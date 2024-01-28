@@ -1,0 +1,686 @@
+MVVM实践：
+================================
+项目结构
+--*--*--*--*--*--*--*--*--*--*--
+com.exapmle.demo.api
+app
+	ModuleApiApp
+bean
+	Film.kt
+	Mm
+repos
+	FilmRepository
+db
+	converter
+		DbFilmConverter.kt
+		ListConverter
+	dao
+		FilmDao
+	util
+		SpDbUtils
+	ApiDatabase
+model
+	ApiViewModel
+	FilmViewModel
+net
+	retrofit
+		RetrofitClient
+	FilmApiService
+	FilmHttpService
+	MmApiService
+	MmHttpService
+view
+	adapter
+		FilmItemAdapter
+	fragment
+		FilmDialogFragment
+	FilmActivity
+ApiActivity
+--*--*--*--*--*--*--*--*--*--*--
+
+1.添加相关依赖：
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+android{
+    // 视图绑定和数据绑定(依赖于此库的模块也必须加上dataBinding，否则会运行时报错找不到DataBinderMapperImpl)
+    buildFeatures {
+        dataBinding = true
+        viewBinding = true
+    }
+}
+dependencies {
+    // retrofit
+    api 'com.squareup.retrofit2:retrofit:2.9.0'
+    api 'com.squareup.retrofit2:converter-gson:2.9.0'
+    api "com.squareup.okhttp3:logging-interceptor:4.9.0"
+    api 'com.squareup.retrofit2:converter-scalars:2.9.0'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
+
+    //room
+    kapt 'androidx.room:room-compiler:2.5.2'
+    api 'androidx.room:room-runtime:2.5.2'
+    api 'androidx.room:room-ktx:2.5.2'
+}
+
+2.初始化数据库：
+ModuleApiApp(this).setUp()
+class ModuleApiApp(applicationContext: Context) {
+
+    private val context = applicationContext
+
+    // 在这里可以初始化模块独有的组件和资源，在宿主中调用
+    fun setUp() {
+        // 初始化操作
+        ApiDatabase.initDB(context)
+    }
+}
+
+3.数据层
+-------------bean------------
+@Entity(tableName = "film")
+@TypeConverters(
+    FilmWithDataListConverter::class,
+    FilmWithDirectorListConverter::class,
+    FilmWithWriterListConverter::class,
+    FilmWithActorListConverter::class,
+    FilmWithDataXListConverter::class
+)
+data class Film(
+    @PrimaryKey val doubanId: String = "",
+    val doubanRating: String?,
+    val doubanVotes: Int?,
+    val duration: Int?,
+    val id: String?,
+    val imdbId: String?,
+    val imdbRating: String?,
+    val imdbVotes: Int?,
+    val originalName: String?,
+    val rottenRating: String?,
+    val rottenVotes: Int?,
+    val type: String?,
+    val updatedAt: Long?,
+    val year: String?,
+    val alias: String?,
+    val createdAt: Long?,
+    val dateReleased: String?,
+    val `data`: List<Data>?,
+    val director: List<Director>?,
+    val writer: List<Writer>?,
+    val actor: List<Actor>?,
+)
+
+data class Data(
+    val id: String?,
+    val country: String?,
+    val createdAt: Long?,
+    val description: String?,
+    val genre: String?,
+    val lang: String?,
+    val language: String?,
+    val movie: String?,
+    val name: String?,
+    val poster: String?,
+    val shareImage: String?,
+    val updatedAt: Long?
+)
+
+data class Actor(
+    val id: String?,
+    val createdAt: Long?,
+    val `data`: List<DataX>?,
+    val updatedAt: Long?
+)
+
+data class Director(
+    val id: String?,
+    val createdAt: Long?,
+    val `data`: List<DataX>?,
+    val updatedAt: Long?
+)
+
+data class Writer(
+    val id: String?,
+    val createdAt: Long?,
+    val `data`: List<DataX>?,
+    val updatedAt: Long?
+)
+
+data class DataX(
+    val id: String?,
+    val createdAt: Long?,
+    val lang: String?,
+    val name: String?,
+    val person: String?,
+    val updatedAt: Long?
+)
+-------------converter------------
+open class ListConverter<T>(cls: Class<T>) {
+    private val gson = Gson()
+    private val cls = cls
+
+    @TypeConverter
+    fun fromList(list: List<T>?): String {
+        return gson.toJson(list)
+    }
+
+    /**
+     * 解决om.google.gson.internal.LinkedTreeMap cannot be cast to问题
+     */
+    @TypeConverter
+    fun toList(string: String): List<T>? {
+        return kotlin.runCatching {
+            val type = TypeToken.getParameterized(MutableList::class.java, cls).type
+            gson.fromJson<ArrayList<T>>(string, type)
+        }.getOrElse {
+            null
+        }
+    }
+}
+
+DbFilmConverter.kt
+
+class FilmWithActorListConverter : ListConverter<Actor>(Actor::class.java)
+
+class FilmWithDataListConverter : ListConverter<Data>(Data::class.java)
+
+class FilmWithDataXListConverter : ListConverter<DataX>(DataX::class.java)
+
+class FilmWithDirectorListConverter : ListConverter<Director>(Director::class.java)
+
+class FilmWithWriterListConverter : ListConverter<Writer>(Writer::class.java)
+
+-------------dao------------
+@Dao
+interface FilmDao {
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertList(dataList: List<Film>): LongArray
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(film: Film): Long
+
+    @Update
+    suspend fun updateList(dataList: List<Film>)
+
+    @Delete
+    suspend fun delete(film: Film)
+
+    @Query("DELETE FROM film")
+    suspend fun deleteAll()
+
+    @Query("SELECT * FROM film")
+    suspend fun getAll(): List<Film>
+
+    @Query("SELECT * FROM film WHERE data LIKE '%' || :keyword || '%'")
+    suspend fun getFilmsByName(keyword: String): List<Film>
+
+    @Query("SELECT * FROM film WHERE doubanId = :doubanId")
+    suspend fun getFilmByDoubanId(doubanId: String): Film?
+
+    @Query("SELECT * FROM film WHERE doubanId = :doubanId")
+    fun getFilmsByDoubanIdObserve(doubanId: String): Flow<Film>
+}
+-------------database------------
+private const val DATABASE_VERSION = 1
+private const val DATABASE_NAME = "helpDemoApi.db"
+private var needInit = true
+
+@Database(
+    entities = [Film::class],
+    version = DATABASE_VERSION,
+    exportSchema = false
+)
+abstract class ApiDatabase : RoomDatabase() {
+
+    abstract fun filmDao(): FilmDao
+
+    companion object {
+        const val TAG = "ApiDatabase"
+        private lateinit var application: Context
+
+        val db: ApiDatabase by lazy {
+            Room.databaseBuilder(application, ApiDatabase::class.java, DATABASE_NAME)
+                .addCallback(CreatedCallBack)
+                .build()
+        }
+
+        fun initDB(context: Context) {
+            if (needInit) {
+                application = context.applicationContext
+                LogUtil.d(TAG, "init  database ")
+            } else {
+                LogUtil.d(TAG, "initDB:The database has been initialized")
+            }
+        }
+
+        private object CreatedCallBack : Callback() {
+            override fun onCreate(db: SupportSQLiteDatabase) {
+                //在新装app时会调用，调用时机为数据库build()之后，数据库升级时不调用此函数
+                LogUtil.d(TAG, "CreatedCallBack")
+            }
+
+            override fun onOpen(db: SupportSQLiteDatabase) {
+                // 数据库打开时回调,表示初始化完成
+                LogUtil.d(TAG, "CreatedCallBack 数据库打开 ")
+                needInit = false
+            }
+        }
+    }
+}
+
+4.网络层
+object RetrofitClient {
+    private const val TAG = "RetrofitClient"
+    private const val CALL_TIME_OUT = 30L
+
+    private val client: OkHttpClient by lazy { newClient() }
+
+    private val loggingInterceptor: Interceptor by lazy {
+        HttpLoggingInterceptor { message ->
+            LogUtil.d(TAG, message)
+        }.apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+    }
+
+    /**
+     * OkHttpClient客户端
+     */
+    private fun newClient(): OkHttpClient = OkHttpClient.Builder().apply {
+        callTimeout(CALL_TIME_OUT, TimeUnit.SECONDS)
+        addInterceptor(loggingInterceptor)// 仅debug模式启用日志过滤器
+    }.build()
+
+    /**
+     * 创建API Service接口实例
+     */
+    fun <T> createService(baseUrl: String, clazz: Class<T>): T =
+        Retrofit.Builder().baseUrl(baseUrl).client(client)
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build().create(clazz)
+}
+
+/**
+ * 获取影视数据
+ * Get https://api.wmdb.tv/movie/api?id=doubanid
+ * 1292052
+ * 全文模糊搜索，根据匹配分数排序
+ * Get https://api.wmdb.tv/api/v1/movie/search?q=英雄本色&limit=10&skip=0&lang=Cn&year=2002
+ * TOP250接口
+ * Get https://api.wmdb.tv/api/v1/top?type=Imdb&skip=0&limit=50&lang=Cn
+ */
+interface FilmApiService {
+
+    @GET("/movie/api")
+    fun getFilmInfoById(@Query("id") doubanId: String): Call<Film>
+
+    @GET("/api/v1/movie/search")
+    fun getSearchFilmListByKeywords(
+        @Query("q") keywords: String,
+        @Query("limit") limit: Int
+    ): Call<List<Film>>
+}
+
+object FilmHttpService {
+
+    private const val TAG = "FilmHttpService"
+
+    private const val BASE_URL = "https://api.wmdb.tv"
+
+    val api by lazy {
+        RetrofitClient.createService(BASE_URL, FilmApiService::class.java)
+    }
+
+    /**
+     * 根据id获取影视数据
+     */
+    fun getFilmInfoByDoubanId(doubanId: String): Film? {
+        kotlin.runCatching {
+            val response = api.getFilmInfoById(doubanId).execute()
+            if (response.code() == HttpURLConnection.HTTP_OK) {
+                return response.body() as Film
+            }
+        }.onFailure {
+            LogUtil.e(TAG, "getFilmInfoById, e:${it.message}")
+        }
+        return null
+    }
+
+    /**
+     * 获取搜索列表
+     */
+    fun getSearchFilmListByKeywords(keywords: String): List<Film>? {
+        kotlin.runCatching {
+            val response = api.getSearchFilmListByKeywords(keywords, 10).execute()
+            if (response.code() == HttpURLConnection.HTTP_OK) {
+                return response.body()
+            }
+        }.onFailure {
+            LogUtil.e(TAG, "getSearchFilmListByKeywords, e:${it.message}")
+        }
+        return null
+    }
+}
+
+5.业务层
+-------------repository------------
+object FilmRepository {
+
+    private const val TAG = "FilmRepository"
+
+    suspend fun getLocalFilmsByName(keywords: String?): Flow<List<Film>?> = flow {
+        LogUtil.d(TAG, "getLocalFilmsByName, keywords: $keywords")
+        ApiDatabase.db.filmDao().getFilmsByName(keywords ?: "").let {
+            LogUtil.d(TAG, "getLocalFilmsByName, localFilms: $it")
+            emit(it)
+        }
+    }.flowOn(Dispatchers.IO)
+
+    suspend fun getRemoteFilmsByNameAndInsertLocal(keywords: String?): Flow<List<Film>?> = flow {
+        LogUtil.d(TAG, "getRemoteFilmsByNameAndInsertLocal, keywords: $keywords")
+        val remoteFilms = FilmHttpService.getSearchFilmListByKeywords(keywords ?: "")?.also {
+            LogUtil.d(TAG, "getRemoteFilmsByNameAndInsertLocal, remoteFilms: $it")
+            ApiDatabase.db.filmDao().insertList(it)
+        }
+        emit(remoteFilms)
+    }.flowOn(Dispatchers.IO)
+
+    suspend fun getLocalFilmByDoubanId(doubanId: String?): Flow<Film?> = flow {
+        LogUtil.d(TAG, "getLocalFilmsById, doubanId: $doubanId")
+        val localFilm = ApiDatabase.db.filmDao().getFilmByDoubanId(doubanId ?: "")
+        LogUtil.d(TAG, "getLocalFilmsById, localFilm: $localFilm")
+        emit(localFilm)
+    }.flowOn(Dispatchers.IO)
+
+    suspend fun getRemoteFilmByDoubanIdAndInsertLocal(doubanId: String?): Flow<Film?> = flow {
+        LogUtil.d(TAG, "getRemoteFilmByIdAndInsertLocal, doubanId: $doubanId")
+        val remoteFilm = FilmHttpService.getFilmInfoByDoubanId(doubanId ?: "")?.also {
+            LogUtil.d(TAG, "getRemoteFilmByIdAndInsertLocal, remoteFilm: $it")
+            ApiDatabase.db.filmDao().insert(it)
+        }
+        emit(remoteFilm)
+    }.flowOn(Dispatchers.IO)
+}
+-------------viewModel------------
+class FilmViewModel : ViewModel() {
+
+    companion object {
+        private const val TAG = "FilmViewModel"
+    }
+
+    val filmLiveData = MutableLiveData<Film?>()
+    val filmsLiveData = MutableLiveData<List<Film>?>()
+
+    private suspend fun updateLiveData(block: () -> Unit) {
+        withContext(Dispatchers.Main) {
+            block()
+        }
+    }
+
+    fun searchFilm(keywords: String?) {
+        LogUtil.d(TAG, "searchFilm, keywords: $keywords")
+        viewModelScope.launch {
+            // 从本地取
+            FilmRepository.getLocalFilmsByName(keywords).collect { locals ->
+                if (locals?.isNotEmpty() == true) {
+                    updateLiveData { filmsLiveData.value = locals }
+                }
+                if (locals?.isEmpty() == true) {
+                    // 从服务端取并更新到本地数据库
+                    FilmRepository.getRemoteFilmsByNameAndInsertLocal(keywords).collect { remotes ->
+                        // 如果取的本地数据是空的，那么从服务端上取下来的数据再更新UI
+                        updateLiveData { filmsLiveData.value = remotes }
+                    }
+                }
+            }
+        }
+    }
+
+    fun getFilmInfoById(doubanId: String) {
+        LogUtil.d(TAG, "getFilmInfoById, doubanId: $doubanId")
+        viewModelScope.launch {
+            // 从本地取
+            FilmRepository.getLocalFilmByDoubanId(doubanId).collect { local ->
+                // 本地有数据则更新UI
+                local?.let {
+                    updateLiveData { filmLiveData.value = it }
+                }
+                // 获取完整信息时，不仅要考虑数据库对象是null还要考虑其中的详细特例director有没有
+                if ((local == null) || local.director.isNullOrEmpty()) {
+                    // 从服务端取并更新到本地数据库
+                    FilmRepository.getRemoteFilmByDoubanIdAndInsertLocal(doubanId).collect { remote ->
+                        // 如果取的本地数据是空的，那么从服务端上取下来的数据再更新UI
+                        updateLiveData { filmLiveData.value = remote }
+                    }
+                }
+            }
+        }
+    }
+}
+
+6.界面层
+-------------xml------------
+activity_film.xml：
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="film"
+            type="com.example.demopro.api.bean.Film" />
+
+        <variable
+            name="filmViewModel"
+            type="com.example.demopro.api.model.FilmViewModel" />
+
+        <variable
+            name="searchText"
+            type="String" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:context=".view.FilmActivity">
+
+        <ScrollView
+            android:id="@+id/scrollview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="always"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/search_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@null"
+                    android:hint="输入关键字"
+                    android:text="@={searchText}" />
+
+                <com.coui.appcompat.button.COUIButton
+                    android:id="@+id/search_btn"
+                    style="@style/CommonButton"
+                    android:onClick="@{() -> filmViewModel.searchFilm(searchText)}"
+                    android:text="搜索影视" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/films_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+
+item_film.xml：
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="position"
+            type="int" />
+
+        <variable
+            name="film"
+            type="com.example.demopro.api.bean.Film" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginHorizontal="2dp"
+        app:cardCornerRadius="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:text="@{`影视信息：`+position}"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:text="@{`名字：`+film.originalName}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:text="@{`年份：`+film.year}" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>
+-------------activity/fragment------------
+class FilmActivity : BaseActivity() {
+
+    companion object {
+        private const val TAG = "FilmActivity"
+    }
+
+    private val filmViewModel by lazy {
+        ViewModelProvider(this)[FilmViewModel::class.java]
+    }
+
+    private var binding: ActivityFilmBinding? = null
+    private var itemAdapter: FilmItemAdapter? = null
+
+    @SuppressLint("SetTextI18n")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_film)
+        binding?.lifecycleOwner = this
+
+        // 绑定ViewModel
+        binding?.tvViewModel = filmViewModel
+
+        initRecycleView()
+    }
+
+    private fun initRecycleView() {
+        itemAdapter = FilmItemAdapter()
+        itemAdapter?.setOnItemClickListener(object : FilmItemAdapter.OnItemClickListener {
+            override fun onItemClick(item: Film, position: Int) {
+                FilmDialogFragment(item).show(supportFragmentManager, "")
+            }
+        })
+        binding?.filmsRv?.apply {
+            layoutManager = LinearLayoutManager(this@FilmActivity)
+            adapter = itemAdapter
+        }
+        filmViewModel.filmsLiveData.observe(this) { filmsInfo ->
+            LogUtil.d(TAG, "initRecycleView, updateUI-filmsInfo: $filmsInfo")
+            // 在 UI 层接收数据更新
+            if (filmsInfo.isNullOrEmpty()) {
+                Toast.makeText(this@FilmActivity, "请稍后再试", Toast.LENGTH_SHORT).show()
+                return@observe
+            }
+            itemAdapter?.submitList(filmsInfo.toMutableList())
+        }
+    }
+}
+
+class FilmItemAdapter : ListAdapter<Film, FilmItemAdapter.ItemViewHolder>(ItemDiffCallback()) {
+
+    private var onItemClickListener: OnItemClickListener? = null
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ItemFilmBinding.inflate(inflater, parent, false)
+        return ItemViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+        val item = getItem(position)
+        // 绑定数据
+        holder.bind(item, position)
+
+        // 设置点击事件监听器
+        holder.itemView.apply {
+            addClickScale()
+            setOnClickListener {
+                onItemClickListener?.onItemClick(item, position)
+            }
+        }
+    }
+
+    inner class ItemViewHolder(private val binding: ItemFilmBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: Film, position: Int) {
+            binding.film = item
+            binding.position = position + 1
+            binding.executePendingBindings()
+        }
+    }
+
+    class ItemDiffCallback : DiffUtil.ItemCallback<Film>() {
+        override fun areItemsTheSame(oldItem: Film, newItem: Film): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Film, newItem: Film): Boolean {
+            return oldItem == newItem
+        }
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        onItemClickListener = listener
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(item: Film, position: Int)
+    }
+}
+

@@ -1,4 +1,4 @@
-package com.jayson.komm.api.adapter
+package com.jayson.komm.api.view.adapter
 
 import android.content.Context
 import android.content.res.Resources
@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.jayson.komm.api.R
-import com.jayson.komm.api.bean.Mm
+import com.jayson.komm.api.bean.Picture
 
 /**
  * @Author: Jayson
@@ -17,15 +19,22 @@ import com.jayson.komm.api.bean.Mm
  * @Version: 1.0
  * @Description:
  */
-class MmAdapter(
+class WaterFallAdapter(
     private val context: Context,
     private val column: Int = 2
-) : RecyclerView.Adapter<MmAdapter.ImageViewHolder>() {
+) : PagingDataAdapter<Picture, WaterFallAdapter.ImageViewHolder>(diffCallback) {
 
-    private var dataItems: MutableList<Mm> = mutableListOf()
+    companion object {
+        private val diffCallback = object : DiffUtil.ItemCallback<Picture>() {
+            override fun areItemsTheSame(oldItem: Picture, newItem: Picture): Boolean {
+                return oldItem.hoverUrl == newItem.hoverUrl
+            }
 
-    // 用于下拉刷新的刷新状态，初始值为false
-    var isRefreshing = false
+            override fun areContentsTheSame(oldItem: Picture, newItem: Picture): Boolean {
+                return oldItem == newItem
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_image, parent, false)
@@ -36,29 +45,17 @@ class MmAdapter(
         val layoutParams = holder.itemView.layoutParams
         layoutParams.width = imageWidth()
         holder.itemView.layoutParams = layoutParams
-        Glide.with(context)
-            .load(dataItems[position].imageUrl)
-            .into(holder.imageView)
+        val data = getItem(position)
+        holder.bind(data)
     }
-
-    override fun getItemCount(): Int {
-        return dataItems.size
-    }
-
-    fun setData(data: MutableList<Mm>) {
-        dataItems = data
-        notifyDataSetChanged()
-    }
-
-    fun addData(data: MutableList<Mm>) {
-        val startPosition = dataItems.size
-        dataItems.addAll(data)
-        notifyItemRangeInserted(startPosition, data.size)
-    }
-
 
     inner class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imageView: ImageView = itemView.findViewById(R.id.image_view)
+        private val imageView: ImageView = itemView.findViewById(R.id.image_view)
+        fun bind(repo: Picture?) {
+            Glide.with(context)
+                .load(repo?.hoverUrl)
+                .into(imageView)
+        }
     }
 
     private fun imageWidth(): Int {

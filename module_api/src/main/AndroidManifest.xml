@@ -13,16 +13,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.WebActivity"
+            android:name=".view.WebActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.PagingActivity"
+            android:name=".view.PagingActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.MmActivity"
+            android:name=".view.MmActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.ListActivity"
+            android:name=".view.ListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.FilmActivity"
             android:exported="false" />
     </application>
 

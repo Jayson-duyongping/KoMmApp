@@ -1,9 +1,9 @@
-package com.jayson.komm.api.ui
+package com.jayson.komm.api.view
 
 import androidx.lifecycle.lifecycleScope
-import com.jayson.komm.api.adapter.MmAdapter
+import com.jayson.komm.api.view.adapter.MmAdapter
 import com.jayson.komm.api.databinding.ActivityMmBinding
-import com.jayson.komm.api.repo.MmHttpService
+import com.jayson.komm.api.net.MmHttpService
 import com.jayson.komm.common.base.BaseActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

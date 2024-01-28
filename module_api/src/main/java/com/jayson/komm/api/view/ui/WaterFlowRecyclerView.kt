@@ -1,4 +1,4 @@
-package com.jayson.komm.api.view
+package com.jayson.komm.api.view.ui
 
 import android.content.Context
 import android.util.AttributeSet

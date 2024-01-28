@@ -1,4 +1,4 @@
-package com.jayson.komm.api.repo
+package com.jayson.komm.api.net
 
 import com.jayson.komm.api.bean.BaseResult
 import com.jayson.komm.api.bean.Picture

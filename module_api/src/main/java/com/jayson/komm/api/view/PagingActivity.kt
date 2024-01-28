@@ -1,8 +1,8 @@
-package com.jayson.komm.api.ui
+package com.jayson.komm.api.view
 
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.jayson.komm.api.adapter.WaterFallAdapter
+import com.jayson.komm.api.view.adapter.WaterFallAdapter
 import com.jayson.komm.api.databinding.ActivityPagingBinding
 import com.jayson.komm.api.model.PictureViewModel
 import com.jayson.komm.common.base.BaseActivity
