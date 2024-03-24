@@ -47,7 +47,7 @@
                         android:id="@+id/mvvm_btn"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_marginEnd="@dimen/common_padding_half"
+                        android:layout_marginEnd="@dimen/common_padding"
                         android:layout_weight="1"
                         card_view:cardBackgroundColor="@color/blueColor3"
                         card_view:cardCornerRadius="8dp">
@@ -64,7 +64,7 @@
                         android:id="@+id/dev_btn"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/common_padding_half"
+                        android:layout_marginEnd="@dimen/common_padding"
                         android:layout_weight="1"
                         card_view:cardBackgroundColor="@color/blueColor3"
                         card_view:cardCornerRadius="8dp">
@@ -74,6 +74,22 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="开发项"
+                            android:textColor="@color/white" />
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/ui_btn"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        card_view:cardBackgroundColor="@color/blueColor3"
+                        card_view:cardCornerRadius="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="UI项"
                             android:textColor="@color/white" />
                     </androidx.cardview.widget.CardView>
                 </LinearLayout>

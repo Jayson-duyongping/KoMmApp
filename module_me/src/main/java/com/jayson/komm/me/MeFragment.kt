@@ -22,6 +22,7 @@ class MeFragment : BaseFragment() {
         private const val ACTION_MVVM = "com.jayson.komm.mvvm.Main"
         private const val ACTION_API = "com.jayson.komm.api.Main"
         private const val ACTION_DEV = "com.jayson.komm.dev.Main"
+        private const val ACTION_UI = "com.jayson.komm.ui.Main"
     }
 
     private lateinit var binding: FragmentMeBinding
@@ -41,6 +42,9 @@ class MeFragment : BaseFragment() {
         }
         binding.devBtn.setOnClickListener {
             startGoAction(activity, Intent(ACTION_DEV))
+        }
+        binding.uiBtn.setOnClickListener {
+            startGoAction(activity, Intent(ACTION_UI))
         }
         binding.pictureBtn.setOnClickListener {
             goLocalFileActivity(TYPE_IMAGE)

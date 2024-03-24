@@ -11,9 +11,11 @@ dependencies {
     // tech
     implementation project(':tech_mvvm')
     implementation project(':tech_dev')
-    // module
+    // 依赖module
+    implementation project(':module_ui')
+    implementation project(':module_api')
+    // 业务module
     implementation project(':module_home')
     implementation project(':module_ent')
     implementation project(':module_me')
-    implementation project(':module_api')
 }
