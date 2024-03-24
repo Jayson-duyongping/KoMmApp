@@ -31,5 +31,8 @@ class ApiActivity : BaseActivity() {
         binding.filmApiBtn.setOnClickListener {
             startGoActivity(this, Intent(this, FilmActivity::class.java))
         }
+        binding.pythonBtn.setOnClickListener {
+            startGoActivity(this, Intent(this, PythonActivity::class.java))
+        }
     }
 }

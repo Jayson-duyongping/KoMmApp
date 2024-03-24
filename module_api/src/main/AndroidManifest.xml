@@ -27,6 +27,9 @@
         <activity
             android:name=".view.FilmActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.PythonActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

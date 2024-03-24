@@ -40,5 +40,11 @@
             style="@style/CommonButton"
             android:layout_marginTop="20dp"
             android:text="影视数据Api" />
+
+        <Button
+            android:id="@+id/python_btn"
+            style="@style/CommonButton"
+            android:layout_marginTop="20dp"
+            android:text="调用Python" />
     </LinearLayout>
 </LinearLayout>
