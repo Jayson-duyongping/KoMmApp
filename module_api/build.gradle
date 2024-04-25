@@ -19,6 +19,21 @@ android {
                 install "Pillow"
             }
         }
+
+        // 配置CMakeLists的参数
+        externalNativeBuild {
+            cmake {
+                cppFlags "-frtti -fexceptions"
+                arguments "-DANDROID_ARM_NEON=TRUE"
+            }
+        }
+    }
+
+    // 配置CMakeLists的路径
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+        }
     }
 }
 

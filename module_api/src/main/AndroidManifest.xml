@@ -30,6 +30,9 @@
         <activity
             android:name=".view.PythonActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.NDKActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

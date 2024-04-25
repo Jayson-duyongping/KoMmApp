@@ -46,5 +46,11 @@
             style="@style/CommonButton"
             android:layout_marginTop="20dp"
             android:text="调用Python" />
+
+        <Button
+            android:id="@+id/ndk_btn"
+            style="@style/CommonButton"
+            android:layout_marginTop="20dp"
+            android:text="调用NDK" />
     </LinearLayout>
 </LinearLayout>

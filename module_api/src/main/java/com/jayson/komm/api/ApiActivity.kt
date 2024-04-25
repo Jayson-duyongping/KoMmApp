@@ -34,5 +34,8 @@ class ApiActivity : BaseActivity() {
         binding.pythonBtn.setOnClickListener {
             startGoActivity(this, Intent(this, PythonActivity::class.java))
         }
+        binding.ndkBtn.setOnClickListener {
+            startGoActivity(this, Intent(this, NDKActivity::class.java))
+        }
     }
 }
