@@ -17,6 +17,9 @@
         <activity
             android:name=".image.ImageActivity"
             android:exported="false" />
+        <activity
+            android:name=".image.ImageRotationActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -5,6 +5,7 @@ import com.jayson.komm.common.base.BaseActivity
 import com.jayson.komm.common.util.JumpUtils
 import com.jayson.komm.ui.databinding.ActivityUiBinding
 import com.jayson.komm.ui.image.ImageActivity
+import com.jayson.komm.ui.image.ImageRotationActivity
 import com.jayson.komm.ui.viewpager2.ViewPager2Activity
 
 class UIActivity : BaseActivity() {
@@ -26,6 +27,9 @@ class UIActivity : BaseActivity() {
         }
         binding.imageBtn.setOnClickListener {
             JumpUtils.startGoActivity(this, Intent(this, ImageActivity::class.java))
+        }
+        binding.imageRotationBtn.setOnClickListener {
+            JumpUtils.startGoActivity(this, Intent(this, ImageRotationActivity::class.java))
         }
     }
 }

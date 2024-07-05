@@ -5,6 +5,7 @@ import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import android.view.animation.OvershootInterpolator
 import android.view.animation.TranslateAnimation
 import androidx.core.widget.NestedScrollView
 
@@ -82,7 +83,8 @@ class StretchScrollView(context: Context, attrs: AttributeSet?) :
     private fun planAnimation() {
         // 开启移动动画
         val animation = TranslateAnimation(0F, 0F, innerView?.top?.toFloat()?:0f, normal.top.toFloat())
-        animation.duration = 200
+        animation.duration = 500
+        animation.interpolator = OvershootInterpolator()
         innerView?.startAnimation(animation)
         // 补间动画并不会真正修改innerView的位置，这里需要设置使得innerView回到正常的布局位置
         innerView?.layout(normal.left, normal.top, normal.right, normal.bottom)

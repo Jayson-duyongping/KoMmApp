@@ -20,5 +20,11 @@
             style="@style/CommonButton"
             android:layout_marginTop="20dp"
             android:text="Image" />
+
+        <Button
+            android:id="@+id/image_rotation_btn"
+            style="@style/CommonButton"
+            android:layout_marginTop="20dp"
+            android:text="ImageRotation" />
     </LinearLayout>
 </LinearLayout>

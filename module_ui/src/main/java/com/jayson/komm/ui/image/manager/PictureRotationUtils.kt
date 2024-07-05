@@ -3,13 +3,16 @@ package com.jayson.komm.ui.image.manager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import android.graphics.PointF
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.jayson.komm.common.util.LogUtils
 import com.jayson.komm.ui.R
+import kotlin.math.cos
+import kotlin.math.sin
 
-object PictureRotationManager {
+object PictureRotationUtils {
 
     private const val TAG = "PictureRotationManager"
     private const val ROTATION_DEGREE = -90f
@@ -81,5 +84,38 @@ object PictureRotationManager {
         matrix.postRotate(rotationDegrees)
         // 应用Matrix变换到Bitmap
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+    }
+
+    /**
+     * 定义一个函数，用于计算旋转后的矩形
+     */
+    @JvmStatic
+    fun rotateAndScaleRectangle(x: Float, y: Float, width: Float, height: Float, angleInDegrees: Float, scale: Float): List<PointF> {
+        // 计算旋转后的中心点坐标
+        val centerX = x + width / 2
+        val centerY = y + height / 2
+        // 将矩形的四个顶点坐标表示为相对中心点的坐标
+        val x1 = x - centerX
+        val y1 = y - centerY
+        val x2 = x + width - centerX
+        val y2 = y - centerY
+        val x3 = x - centerX
+        val y3 = y + height - centerY
+        val x4 = x + width - centerX
+        val y4 = y + height - centerY
+        // 计算旋转后并缩放的四个顶点坐标
+        val newPoints = mutableListOf<PointF>()
+        val angleInRadians = Math.toRadians(angleInDegrees.toDouble())
+        for ((px, py) in listOf(x1 to y1, x2 to y2, x3 to y3, x4 to y4)) {
+            // 首先旋转
+            val rotatedX = px * cos(angleInRadians) - py * sin(angleInRadians)
+            val rotatedY = px * sin(angleInRadians) + py * cos(angleInRadians)
+            // 然后缩放
+            val scaledX = rotatedX * scale
+            val scaledY = rotatedY * scale
+            // 保存顶点坐标
+            newPoints.add(PointF((scaledX + centerX).toFloat(), (scaledY + centerY).toFloat()))
+        }
+        return newPoints
     }
 }

@@ -88,7 +88,7 @@ class VerticalPagerView<T> @JvmOverloads constructor(
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
             val view =
-                LayoutInflater.from(parent.context).inflate(R.layout.item_page, parent, false)
+                LayoutInflater.from(parent.context).inflate(R.layout.item_frag_page, parent, false)
             return MyHolder(view)
         }
 
