@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/web_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/orangeColor1" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/web_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/web_info_tv"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/greenColor2"
+                android:text="信息栏" />
+
+            <WebView
+                android:id="@+id/web_content_wb"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>
+
+<!--    android中我有这样一个布局，-->
+<!--    现在有这样一个需求：-->
+<!--    刚进入这个页面的时候，显示信息栏和webview,-->
+<!--    2s后，web_scroll_view向上滚动信息栏的高度+webview顶部50dp的内容高度，有动效，-->
+<!--    以上的动效要求平滑，要怎么实现，附上完整代码，语言使用kotlin-->

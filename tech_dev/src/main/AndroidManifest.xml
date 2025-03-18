@@ -3,6 +3,7 @@
     package="com.jayson.komm.dev">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application>
         <activity
@@ -20,6 +21,14 @@
 
         <activity
             android:name=".view.AnimActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".view.WebSlideActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".view.WebSlide2Activity"
             android:exported="false" />
 
         <service

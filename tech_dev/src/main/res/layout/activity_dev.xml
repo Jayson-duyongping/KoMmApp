@@ -20,5 +20,17 @@
             style="@style/CommonButton"
             android:layout_marginTop="20dp"
             android:text="动画相关" />
+
+        <Button
+            android:id="@+id/web_slide_btn"
+            style="@style/CommonButton"
+            android:layout_marginTop="20dp"
+            android:text="web滑动效果" />
+
+        <Button
+            android:id="@+id/web_slide2_btn"
+            style="@style/CommonButton"
+            android:layout_marginTop="20dp"
+            android:text="web滑动效果2" />
     </LinearLayout>
 </LinearLayout>

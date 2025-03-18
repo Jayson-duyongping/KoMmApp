@@ -6,6 +6,8 @@ import com.jayson.komm.common.util.JumpUtils
 import com.jayson.komm.dev.databinding.ActivityDevBinding
 import com.jayson.komm.dev.view.AnimActivity
 import com.jayson.komm.dev.view.ServiceActivity
+import com.jayson.komm.dev.view.WebSlide2Activity
+import com.jayson.komm.dev.view.WebSlideActivity
 
 class DevActivity : BaseActivity() {
 
@@ -26,6 +28,12 @@ class DevActivity : BaseActivity() {
         }
         binding.animBtn.setOnClickListener {
             JumpUtils.startGoActivity(this, Intent(this, AnimActivity::class.java))
+        }
+        binding.webSlideBtn.setOnClickListener {
+            JumpUtils.startGoActivity(this, Intent(this, WebSlideActivity::class.java))
+        }
+        binding.webSlide2Btn.setOnClickListener {
+            JumpUtils.startGoActivity(this, Intent(this, WebSlide2Activity::class.java))
         }
     }
 }
