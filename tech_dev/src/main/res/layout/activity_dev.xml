@@ -32,5 +32,11 @@
             style="@style/CommonButton"
             android:layout_marginTop="20dp"
             android:text="web滑动效果2" />
+
+        <Button
+            android:id="@+id/web_header_btn"
+            style="@style/CommonButton"
+            android:layout_marginTop="20dp"
+            android:text="web-Header布局" />
     </LinearLayout>
 </LinearLayout>

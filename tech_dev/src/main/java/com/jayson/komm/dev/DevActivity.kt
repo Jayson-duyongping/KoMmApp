@@ -4,10 +4,7 @@ import android.content.Intent
 import com.jayson.komm.common.base.BaseActivity
 import com.jayson.komm.common.util.JumpUtils
 import com.jayson.komm.dev.databinding.ActivityDevBinding
-import com.jayson.komm.dev.view.AnimActivity
-import com.jayson.komm.dev.view.ServiceActivity
-import com.jayson.komm.dev.view.WebSlide2Activity
-import com.jayson.komm.dev.view.WebSlideActivity
+import com.jayson.komm.dev.view.*
 
 class DevActivity : BaseActivity() {
 
@@ -34,6 +31,10 @@ class DevActivity : BaseActivity() {
         }
         binding.webSlide2Btn.setOnClickListener {
             JumpUtils.startGoActivity(this, Intent(this, WebSlide2Activity::class.java))
+        }
+
+        binding.webHeaderBtn.setOnClickListener {
+            JumpUtils.startGoActivity(this, Intent(this, WebHeaderActivity::class.java))
         }
     }
 }
