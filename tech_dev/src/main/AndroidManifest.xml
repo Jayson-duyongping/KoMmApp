@@ -32,6 +32,14 @@
             android:exported="false" />
 
         <activity
+            android:name=".view.WebSlide3Activity"
+            android:exported="false" />
+
+        <activity
+            android:name=".view.SubscriptViewActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".view.WebHeaderActivity"
             android:exported="false" />
 

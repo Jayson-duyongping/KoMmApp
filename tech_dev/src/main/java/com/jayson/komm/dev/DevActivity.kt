@@ -32,6 +32,12 @@ class DevActivity : BaseActivity() {
         binding.webSlide2Btn.setOnClickListener {
             JumpUtils.startGoActivity(this, Intent(this, WebSlide2Activity::class.java))
         }
+        binding.webSlide3Btn.setOnClickListener {
+            JumpUtils.startGoActivity(this, Intent(this, WebSlide3Activity::class.java))
+        }
+        binding.subscriptBtn.setOnClickListener {
+            JumpUtils.startGoActivity(this, Intent(this, SubscriptViewActivity::class.java))
+        }
 
         binding.webHeaderBtn.setOnClickListener {
             JumpUtils.startGoActivity(this, Intent(this, WebHeaderActivity::class.java))

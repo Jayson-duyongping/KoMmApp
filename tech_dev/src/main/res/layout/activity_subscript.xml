@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <EditText
+        android:id="@+id/word_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/increase_height_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Increase Toolbar Height"
+        app:layout_constraintTop_toBottomOf="@id/word_et"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <ImageView
+        app:layout_constraintBottom_toTopOf="@id/toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@mipmap/placeholder"
+        android:layout_marginBottom="5dp"/>
+
+    <com.jayson.komm.dev.view.widget.RadiusTextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:padding="8dp"
+        app:cornerRadius="50dp"
+        android:background="@drawable/rounded_transparent_bg"
+        app:layout_constraintBottom_toTopOf="@id/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="20dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

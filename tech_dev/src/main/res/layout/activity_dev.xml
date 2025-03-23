@@ -34,6 +34,18 @@
             android:text="web滑动效果2" />
 
         <Button
+            android:id="@+id/web_slide3_btn"
+            style="@style/CommonButton"
+            android:layout_marginTop="20dp"
+            android:text="web滑动效果3" />
+
+        <Button
+            android:id="@+id/subscript_btn"
+            style="@style/CommonButton"
+            android:layout_marginTop="20dp"
+            android:text="角标view" />
+
+        <Button
             android:id="@+id/web_header_btn"
             style="@style/CommonButton"
             android:layout_marginTop="20dp"
