@@ -2,12 +2,14 @@ package com.jayson.komm.dev.view
 
 import android.animation.*
 import android.annotation.SuppressLint
-import android.view.View
+import android.content.Context
+import android.view.*
 import android.webkit.WebSettings
 import android.webkit.WebViewClient
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.jayson.komm.common.base.BaseActivity
-import com.jayson.komm.dev.R
-import com.jayson.komm.dev.databinding.ActivityWebSlide3Binding
+import com.jayson.komm.dev.databinding.ActivityWebSlideBehavior2Binding
+import com.jayson.komm.dev.view.behavior.HeaderBehavior
 
 
 class WebSlide3Activity : BaseActivity() {
@@ -17,18 +19,13 @@ class WebSlide3Activity : BaseActivity() {
 
     }
 
-    private lateinit var binding: ActivityWebSlide3Binding
+    private lateinit var binding: ActivityWebSlideBehavior2Binding
 
     override fun initView() {
         super.initView()
         // 初始化binding
-        binding = ActivityWebSlide3Binding.inflate(layoutInflater)
+        binding = ActivityWebSlideBehavior2Binding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // 确保Toolbar在最上层（XML中应最后声明）
-        findViewById<View>(R.id.tool_bar).apply {
-            bringToFront() // 确保位于视图最上层
-        }
 
         initWebView()
         initListener()
@@ -44,9 +41,23 @@ class WebSlide3Activity : BaseActivity() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initListener() {
+        binding.webView.postDelayed({
+            autoScrollViews()
+        },2000)
     }
 
-    private fun Int.dpToPx(): Int {
-        return (this * resources.displayMetrics.density).toInt()
+    private fun autoScrollViews() {
+        val params = binding.header.layoutParams as CoordinatorLayout.LayoutParams
+        val behavior = params.behavior as? HeaderBehavior
+        val scrollTargetHeight = binding.header.height + 100.dpToPx(this)
+
+        // WebView会自动跟随Header移动，因为WebViewBehavior已经实现了依赖关系
+        behavior?.smoothScroll(binding.header, -scrollTargetHeight)
+
+    }
+
+    // dp 转 px 扩展函数
+    fun Int.dpToPx(context: Context): Int {
+        return (this * context.resources.displayMetrics.density).toInt()
     }
 }
