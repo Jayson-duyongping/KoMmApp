@@ -43,6 +43,10 @@
             android:name=".view.WebHeaderActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".view.ConstraintActivity"
+            android:exported="false" />
+
         <service
             android:name=".service.DevJobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />

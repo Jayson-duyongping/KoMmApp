@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/parent_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <View
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="#627788"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- 顶部 Header（可以自定义内容） -->
+    <LinearLayout
+        android:id="@+id/header_view"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#6200EE"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/content_view"
+        app:layout_constraintTop_toBottomOf="@+id/toolBar" />
+
+    <ViewStub
+        android:id="@+id/stub_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout="@layout/layout_temp_view"
+        app:layout_constraintBottom_toTopOf="@+id/content_view"
+        app:layout_constraintTop_toBottomOf="@+id/header_view"/>
+
+    <View
+        android:id="@+id/content_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/header_view"
+        android:background="@android:color/holo_green_dark"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

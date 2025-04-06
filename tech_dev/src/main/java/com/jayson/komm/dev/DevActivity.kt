@@ -42,5 +42,8 @@ class DevActivity : BaseActivity() {
         binding.webHeaderBtn.setOnClickListener {
             JumpUtils.startGoActivity(this, Intent(this, WebHeaderActivity::class.java))
         }
+        binding.constraintBtn.setOnClickListener {
+            JumpUtils.startGoActivity(this, Intent(this, ConstraintActivity::class.java))
+        }
     }
 }
