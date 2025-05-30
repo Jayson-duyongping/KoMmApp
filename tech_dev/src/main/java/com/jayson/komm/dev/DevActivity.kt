@@ -45,5 +45,8 @@ class DevActivity : BaseActivity() {
         binding.constraintBtn.setOnClickListener {
             JumpUtils.startGoActivity(this, Intent(this, ConstraintActivity::class.java))
         }
+        binding.popWindowBtn.setOnClickListener {
+            JumpUtils.startGoActivity(this, Intent(this, PopWindowActivity::class.java))
+        }
     }
 }
